@@ -1,24 +1,29 @@
-# README
+#タダスポ
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## サイト概要
+無料で楽しめるスポットを手軽に投稿、共有、検索できるサービスです。 どこに出かけたらいいか悩んでいるあなたに、無料で楽しめるスポット、タダスポットの情報をお届けします。 GoogleマップライクなUIでお気に入りのタダスポットを簡単に投稿。 現在位置に近いタダスポットを提案してあなたの外出をアシストします。
 
-Things you may want to cover:
+### サイトテーマ
+「お出かけ先を手軽に見つけるナビゲーションサイト」
 
-* Ruby version
+### テーマを選んだ理由
+出不精の人間にとって、外出することへの心理的ハードルはなかなか高いです。 人が多いところが嫌い、出かける準備が面倒、疲れて動きたくない、お金がかかる、といった理由で週末はずっと家で過ごすということもしばしばあります。 しかし、どこにも出かけずに休日が終わっていくとちょっともったいない気分になります。 そこで「お金」というところに着目して、無料で楽しめるスポットを集めて公開するサービスがあればいいのではと考えました。 このサービスを利用して「無料なら行ってみようかな」と思ってもらい、外出への心理的ハードルをすこし下げられるのではないかと期待しています。
 
-* System dependencies
+### ターゲットユーザ
+・休日に出かけたいけど、あんまりお金を使いたくない人。 ・待ち合わせ場所に早く着いてしまって手持ち無沙汰な人。
 
-* Configuration
+### 主な利用シーン
+・無料スポットの投稿、共有 お気に入りの無料スポットを地図上に登録し、他のユーザと共有できます。 ・無料スポットの検索 近くの無料スポットを検索できます。
 
-* Database creation
+## 設計書
 
-* Database initialization
 
-* How to run the test suite
+## チャレンジ要素一覧
+<https://docs.google.com/spreadsheets/d/18Xf5CMd4y_VgLxrLxWQOUnBsL1wjF3FcMGhi6tlMfkU/edit#gid=0>
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## 開発環境
+- OS：Linux(CentOS)
+- 言語：HTML,CSS,JavaScript,Ruby,SQL
+- フレームワーク：Ruby on Rails
+- JSライブラリ：jQuery
+- IDE：Cloud9
