@@ -1,4 +1,15 @@
 <h1>top</h1>
+<%= form_with model:@post, local:true do |f| %>
+  <%= f.label :スポット %>
+  <%= f.text_field :name %>
+  <%= f.label :コメント %>
+  <%= f.text_field :introduction %>
+  <%= f.label :緯度 %>
+  <%= f.text_field :latitude %>
+  <%= f.label :経度 %>
+  <%= f.text_field :longitude %>
+  <%= f.submit '投稿' %>
+<% end %>
 <div id="map" style="height: 400px; width: 600px;"></div>
 <script>
   var map;
@@ -23,3 +34,9 @@
   }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-871pvf6YPOwyCOtFMqsIwLX72ItQCyM&callback=initMap&v=weekly" async></script>
+<% @posts.each do |post| %>
+  <%= post.name %>
+  <%= post.introduction %>
+  <%= post.latitude %>
+  <%= post.longitude %>
+<% end %>
