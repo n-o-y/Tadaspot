@@ -4,8 +4,21 @@
   var map;
   function initMap(){
     map = new google.maps.Map(document.getElementById('map'),{
-      center: {lat: 34.40, lng: 135.30},
-      zoom: 8
+      center: {lat: 34.45, lng: 135.45},
+      zoom: 16
+    });
+    var marker = new google.maps.Marker({
+      position: map.getCenter(),
+      map: map
+    });
+    map.addListener('click', function(e){
+      var marker = new google.maps.Marker({
+        position: e.latLng,
+        map: map
+      });
+      marker.addListener('click', function(){
+        this.setMap(null);
+      });
     });
   }
 </script>
