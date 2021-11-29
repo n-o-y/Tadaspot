@@ -10,33 +10,74 @@
   <%= f.text_field :longitude %>
   <%= f.submit '投稿' %>
 <% end %>
-<div id="map" style="height: 400px; width: 600px;"></div>
-<script>
-  var map;
-  function initMap(){
-    map = new google.maps.Map(document.getElementById('map'),{
-      center: {lat: 34.45, lng: 135.45},
-      zoom: 16
-    });
-    var marker = new google.maps.Marker({
-      position: map.getCenter(),
-      map: map
-    });
-    map.addListener('click', function(e){
-      var marker = new google.maps.Marker({
-        position: e.latLng,
-        map: map
-      });
-      marker.addListener('click', function(){
-        this.setMap(null);
-      });
-    });
-  }
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-871pvf6YPOwyCOtFMqsIwLX72ItQCyM&callback=initMap&v=weekly" async></script>
 <% @posts.each do |post| %>
+  <div id="infoWindow_#{<%= post.id %>}">
+  <%= post.id %>
   <%= post.name %>
   <%= post.introduction %>
   <%= post.latitude %>
   <%= post.longitude %>
+  </div>
 <% end %>
+
+<input id="address" type="textbox" value="場所を入力">
+<input type="button" value="探す" onclick="codeAddress()">
+<%= form_with model:@post do |f| %>
+  <input type="hidden" name="map[address]" id="hidden_address">
+  <%= f.label :name, "スポット名" %>
+  <%= f.text_field :name %>
+  <%= f.label :introduction, "コメント" %>
+  <%= f.text_area :introduction %>
+  <%= f.submit "投稿する" %>
+<% end %>
+<div id='map', style="height: 400px;, width: 600px;"></div>
+<!--<div><%#= render @posts %></div>-->
+<script>
+let map
+let geocoder
+let marker
+function initMap(){
+  geocoder = new google.maps.Geocoder()
+  mapInstance = new google.maps.Map(document.getElementById('map'), {
+  center: {lat: 35.681, lng: 139.767},
+  zoom: 8
+  });
+  <% @posts.each do |post| %>
+    pos = new google.maps.LatLng(
+      <%= post.latitude %>,
+      <%= post.longitude %>
+      );
+      default_marker = new google.maps.Marker({
+        map: mapInstance,
+        position: pos,
+        icon: {
+          url: ' https://maps.google.com/mapfiles/ms/icons/green-dot.png',
+          scaledSize: new google.maps.Size(40, 40)
+        }
+      });
+  <% end %>
+}
+function codeAddress(){
+  let inputAddress = document.getElementById('address').value;
+  geocoder.geocode( { 'address': inputAddress}, function(results, status) {
+    if (status == 'OK') {
+      mapInstance.setCenter(results[0].geometry.location);
+      if(marker != null){
+        marker.setMap(null);
+      }
+      marker = null;
+      marker = new google.maps.Marker({
+          map: mapInstance,
+          position: results[0].geometry.location
+      });
+      let title = document.getElementById('map_title');
+      title.setAttribute("value", inputAddress);
+      let hidden_address = document.getElementById('hidden_address');
+      hidden_address.setAttribute("value", inputAddress);
+    } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+  });
+}
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_MAP_KEY'] %>&callback=initMap" async></script>
