@@ -7,17 +7,29 @@
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <div>
-      <%= include_gon %>
-      <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-      <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    </div>
+    <!--<div>-->
+    <!--  <%#= include_gon %>-->
+    <!--  <%#= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>-->
+    <!--  <%#= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>-->
+    <!--</div>-->
   </head>
 
   <body>
+    <% if user_signed_in? %>
+      <li>
+        <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
+      </li>
+    <% else %>
+      <li>
+        <%= link_to "新規登録", new_user_registration_path %>
+      </li>
+      <li>
+        <%= link_to "ログイン", new_user_session_path %>
+      </li>
+    <% end %>
     <%= yield %>
-    <script src="https://maps.googleapis.com/maps/api/js?key=#{ENV["GOOGLE_MAP_KEY"]}&callback=initMap"></script>
-    <script src="//cdn.rawgit.com/mahnunchik/markerclustererplus/master/dist/markerclusterer.min.js"></script>
-    <script src="//cdn.rawgit.com/printercu/google-maps-utility-library-v3read-only/master/infobox/src/infobox_packed.js" type="text/javascript"></script>
+    <!--<script src="https://maps.googleapis.com/maps/api/js?key=#{ENV["GOOGLE_MAP_KEY"]}&callback=initMap"></script>-->
+    <!--<script src="//cdn.rawgit.com/mahnunchik/markerclustererplus/master/dist/markerclusterer.min.js"></script>-->
+    <!--<script src="//cdn.rawgit.com/printercu/google-maps-utility-library-v3read-only/master/infobox/src/infobox_packed.js" type="text/javascript"></script>-->
   </body>
 </html>

@@ -21,7 +21,7 @@ function initMap(){
   }
 }
 
-function codeAddress(){ 
+function codeAddress(){
   let inputAddress = document.getElementById('address').value;
 
   geocoder.geocode( { 'address': inputAddress}, function(results, status) {

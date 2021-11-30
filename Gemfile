@@ -67,3 +67,5 @@ gem "gmaps4rails"
 gem "geocoder"
 gem "gon"
 gem "dotenv-rails"
+
+gem 'devise'
