@@ -69,3 +69,5 @@ gem "gon"
 gem "dotenv-rails"
 
 gem 'devise'
+
+gem 'jquery-rails'

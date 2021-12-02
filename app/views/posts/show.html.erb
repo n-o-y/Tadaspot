@@ -3,15 +3,9 @@
 <%= @post.name %>
 <%= @post.introduction %>
 <%#= @post.star %>
-<% if user_signed_in? %>
-  <% if @post.liked_by?(current_user) %>
-    <p><span>いいね♥</span><%= link_to @post.likes.count, post_likes_path(@post.id), method: :delete %></p>
-  <% else %>
-    <p><span>いいね♡</span><%= link_to @post.likes.count, post_likes_path(@post.id), method: :post %></p>
-  <% end %>
-<% else %>
-  <p><span>いいね♡</span><%= @post.likes.count %></p>
-<% end %>
+<div id="like_buttons_<%=@post.id%>">
+  <%= render 'likes/like', post: @post %>
+</div>
 
 <%#= @post.user.name %>
 <!--投稿者ならば<%#= link_to "投稿を編集する", %>-->
