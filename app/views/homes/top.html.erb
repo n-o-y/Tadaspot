@@ -1,15 +1,13 @@
 <h1>top</h1>
-<%= form_with model:@post, local:true do |f| %>
-  <%= f.label :スポット %>
-  <%= f.text_field :name %>
-  <%= f.label :コメント %>
-  <%= f.text_field :introduction %>
-  <%= f.label :緯度 %>
-  <%= f.text_field :latitude %>
-  <%= f.label :経度 %>
-  <%= f.text_field :longitude %>
-  <%= f.submit '投稿' %>
-<% end %>
+<!--< %= form_with model:@post, local:true do |f| %>-->
+<!--  < %= f.text_field :name %>-->
+<!--  < %= f.label :コメント %>-->
+<!--  < %= f.text_field :introduction %>-->
+<!--  < %= f.label :緯度 %>-->
+<!--  < %= f.text_field :latitude %>-->
+<!--  < %= f.text_field :longitude %>-->
+<!--  < %= f.submit '投稿' %>-->
+<!--< % end %>-->
 <% @posts.each do |post| %>
   <div id="infoWindow_#{<%= post.id %>}">
   <%= post.id %>
@@ -20,9 +18,9 @@
   </div>
 <% end %>
 
-<input id="address" type="textbox" value="場所を入力">
+<input id="address" type="textbox" value="" placeholder="場所を入力">
 <input type="button" value="探す" onclick="codeAddress()">
-<%= form_with model:@post do |f| %>
+<%= form_with model:@post, local:true do |f| %>
   <input type="hidden" name="map[address]" id="hidden_address">
   <%= f.label :name, "スポット名" %>
   <%= f.text_field :name %>
@@ -36,38 +34,46 @@
 let map
 let geocoder
 let marker
+
 function initMap(){
   geocoder = new google.maps.Geocoder()
-  mapInstance = new google.maps.Map(document.getElementById('map'), {
-  center: {lat: 35.681, lng: 139.767},
-  zoom: 8
+
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {
+      lat: 35.681,
+      lng: 139.767
+    },
+    zoom: 8
   });
+
   <% @posts.each do |post| %>
     pos = new google.maps.LatLng(
       <%= post.latitude %>,
       <%= post.longitude %>
       );
       default_marker = new google.maps.Marker({
-        map: mapInstance,
+        map: map,
         position: pos,
       });
   <% end %>
 }
+
 function codeAddress(){
   let inputAddress = document.getElementById('address').value;
+
   geocoder.geocode( { 'address': inputAddress}, function(results, status) {
     if (status == 'OK') {
-      mapInstance.setCenter(results[0].geometry.location);
+      map.setCenter(results[0].geometry.location);
       if(marker != null){
         marker.setMap(null);
       }
       marker = null;
       marker = new google.maps.Marker({
-          map: mapInstance,
+          map: map,
           position: results[0].geometry.location
       });
-      let title = document.getElementById('map_title');
-      title.setAttribute("value", inputAddress);
+      let post_name = document.getElementById('post_name');
+      post_name.setAttribute("value", inputAddress);
       let hidden_address = document.getElementById('hidden_address');
       hidden_address.setAttribute("value", inputAddress);
     } else {
