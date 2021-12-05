@@ -14,10 +14,12 @@
   <%= post.id %>
   <%= post.name %>
   <%= post.introduction %>
+  <%= post.user.name %>
   <%= post.latitude %>
   <%= post.longitude %>
   </div>
 <% end %>
+
 
 <input id="address" type="textbox" value="" placeholder="場所を入力">
 <input type="button" value="探す" onclick="codeAddress()">
@@ -28,8 +30,22 @@
   <%= f.text_field :name %>
   <%= f.label :introduction, "コメント" %>
   <%= f.text_area :introduction %>
+  <%= f.hidden_field :user_id, value: current_user.id %>
+  <!--< %= f.label :star, "評価" %>-->
+  <!--<div id="rating-form">-->
+  <!--  < %= f.hidden_field :star, :value => 'score' %>-->
+  <!--</div>-->
   <%= f.submit "投稿する" %>
 <% end %>
+<!--<script>-->
+<!--  $('#rating-form').raty({-->
+<!--    starOn: "< %= asset_path('star-on.png') %>",-->
+<!--    starOff: "< %= asset_path('star-off.png') %>",-->
+<!--    starhalf: "< %= asset_path('star-half.png') %>",-->
+<!--    scoreName: 'post[star]'-->
+<!--  });-->
+</script>
+
 <div id='map', style="height: 400px;, width: 600px;"></div>
 <!--<div><%#= render @posts %></div>-->
 <script>
