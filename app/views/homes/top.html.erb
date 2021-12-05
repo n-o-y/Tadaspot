@@ -17,6 +17,7 @@
   <%= post.user.name %>
   <%= post.latitude %>
   <%= post.longitude %>
+  <%= link_to "投稿詳細", post_path(post.id) %>
   </div>
 <% end %>
 

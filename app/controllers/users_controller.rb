@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
   def show
+    @posts = Post.where(user_id: current_user.id)
+    @post_like = Post.eager_load(:likes).where(likes: {user_id: current_user.id})
   end
   def edit
   end

@@ -1,5 +1,5 @@
 <h1>投稿詳細</h1>
-<%#= @attachment_image_tag @post, :image %>
+<%= attachment_image_tag @post, :image %>
 <%= @post.name %>
 <%= @post.introduction %>
 <%#= @post.star %>
@@ -7,6 +7,11 @@
   <%= render 'likes/like', post: @post %>
 </div>
 
-<%#= @post.user.name %>
-<!--投稿者ならば<%#= link_to "投稿を編集する", %>-->
+<%= @post.user.name %>
+
+<% if @post.user == current_user %>
+  <%= link_to "投稿を編集する", edit_post_path(@post) %>
+  <%= link_to "投稿を削除する", post_path(@post), method: :delete %>
+<% end %>
+
 <!--右に地図とマーカーを表示-->
