@@ -9,7 +9,8 @@
 <!--  < %= f.submit '投稿' %>-->
 <!--< % end %>-->
 <% @posts.each do |post| %>
-  <div id="infoWindow_#{<%= post.id %>}">
+  <div>
+  <%= attachment_image_tag post, :image %>
   <%= post.id %>
   <%= post.name %>
   <%= post.introduction %>
@@ -22,6 +23,7 @@
 <input type="button" value="探す" onclick="codeAddress()">
 <%= form_with model:@post, local:true do |f| %>
   <input type="hidden" name="map[address]" id="hidden_address">
+  <%= f.attachment_field :image %>
   <%= f.label :name, "スポット名" %>
   <%= f.text_field :name %>
   <%= f.label :introduction, "コメント" %>
