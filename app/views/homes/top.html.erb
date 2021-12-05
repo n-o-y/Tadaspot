@@ -1,3 +1,5 @@
+<input id="search" type="textbox" placeholder="検索">
+<input type="button" value="検索" onclick="searchAddress()">
 <h1>top</h1>
 <!--< %= form_with model:@post, local:true do |f| %>-->
 <!--  < %= f.text_field :name %>-->
@@ -62,7 +64,7 @@ function initMap(){
       lat: 35.681,
       lng: 139.767
     },
-    zoom: 8
+    zoom: 14
   });
 
   <% @posts.each do |post| %>
@@ -100,5 +102,33 @@ function codeAddress(){
     }
   });
 }
+
+function searchAddress(){
+  let inputSearchAddress = document.getElementById('search').value;
+
+  geocoder.geocode( { 'address': inputSearchAddress }, function(results, status) {
+    if (status == 'OK') {
+      map.setCenter(results[0].geometry.location);
+    } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+  });
+}
+
+// function searchAddress(){
+//   var geocoder = new google.maps.Geocoder();
+//   let searchMap = document.getElementById('search').value;
+
+//   geocoder.geocode( {'search': searchMap }, function(results, status) {
+//     if (status === 'OK' && results[0]){
+//       new google.maps.Map(target, {
+//         center: results[0].geometry.location,
+//         zoom: 14
+//       });
+//     }else{
+//       alert('失敗しました。理由:' + status);
+//     }
+//   });
+// }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV["GOOGLE_MAP_KEY"]%>&callback=initMap" async defer></script>
