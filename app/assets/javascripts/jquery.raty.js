@@ -1,13 +1,13 @@
 /*!
- * Raty - A Star Rating Plugin
- *
- * The MIT License
- *
- * author:  Washington Botelho
- * github:  wbotelhos/raty
- * version: 3.1.1
- *
- */
+* Raty - A Star Rating Plugin
+*
+* The MIT License
+*
+* author:  Washington Botelho
+* github:  wbotelhos/raty
+* version: 3.1.1
+*
+*/
 
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -18,6 +18,7 @@
     factory(root.jQuery);
   }
 }(this, function($) {
+  console.log("test")
   'use strict';
 
   $.raty = {
@@ -57,6 +58,7 @@
     targetText:   '',
     targetType:   'hint'
   };
+  
 
   $.fn.raty = function(options) {
     return this.each(function() {

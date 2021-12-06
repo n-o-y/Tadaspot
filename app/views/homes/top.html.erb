@@ -13,16 +13,26 @@
 <!--< % end %>-->
 <% @posts.each do |post| %>
   <div>
-  <%= attachment_image_tag post, :image %>
+  <%= attachment_image_tag post, :image, size: "100x100" %>
   <%= post.id %>
   <%= post.name %>
   <%= post.introduction %>
-  <%= post.user.name %>
+  <div class="post-star" data-score="<%= post.star %>"></div>
+  <%#= post.user.name %>
   <%= post.latitude %>
   <%= post.longitude %>
   <%= link_to "投稿詳細", post_path(post.id) %>
   </div>
 <% end %>
+<script>
+  $('.post-star').raty({
+    readOnly: true,
+    score: function(){
+      return $(this).attr('data-score');
+    },
+    path: '/assets'
+  });
+</script>
 
 
 <input id="address" type="textbox" value="" placeholder="場所を入力">
@@ -34,21 +44,15 @@
   <%= f.text_field :name %>
   <%= f.label :introduction, "コメント" %>
   <%= f.text_area :introduction %>
-  <%#= f.hidden_field :user_id, value: current_user.id %>
-  <!--< %= f.label :star, "評価" %>-->
-  <!--<div id="rating-form">-->
-  <!--  < %= f.hidden_field :star, :value => 'score' %>-->
-  <!--</div>-->
+  <%= f.hidden_field :user_id, value: current_user.id %>
+
+  <div id="rating-form">
+    <%= f.label :star, "評価" %>
+    <%= f.hidden_field :star, :value => 'score' %>
+  </div>
   <%= f.submit "投稿する" %>
 <% end %>
-<!--<script>-->
-<!--  $('#rating-form').raty({-->
-<!--    starOn: "< %= asset_path('star-on.png') %>",-->
-<!--    starOff: "< %= asset_path('star-off.png') %>",-->
-<!--    starhalf: "< %= asset_path('star-half.png') %>",-->
-<!--    scoreName: 'post[star]'-->
-<!--  });-->
-</script>
+
 
 <div id='map', style="height: 400px;, width: 600px;"></div>
 <!--<div><%#= render @posts %></div>-->
@@ -117,11 +121,11 @@ function searchAddress(){
 }
 
 function currentLocation(){
-  if(!navigator.geolocation){
-    infoWindow.setPosition(map.getCenter());
-    infoWindow.setContent('Geolocation に対応していません。');
-    infoWindow.open(map);
-  }
+  // if(!navigator.geolocation){
+  //   infoWindow.setPosition(map.getCenter());
+  //   infoWindow.setContent('Geolocation に対応していません。');
+  //   infoWindow.open(map);
+  // }
   navigator.geolocation.getCurrentPosition(function(position) {
     LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
     map = new google.maps.Map(document.getElementById('map'),{
@@ -137,3 +141,11 @@ function currentLocation(){
 
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV["GOOGLE_MAP_KEY"]%>&callback=initMap" async defer></script>
+<script>
+  $('#rating-form').raty({
+    starOn: "<%= asset_path('star-on.png') %>",
+    starOff: "<%= asset_path('star-off.png') %>",
+    starHalf: "<%= asset_path('star-half.png') %>",
+    scoreName: 'post[star]' //登録するモデル名とカラム名を記述
+  });
+</script>
