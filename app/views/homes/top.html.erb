@@ -1,5 +1,6 @@
 <input id="search" type="textbox" placeholder="検索">
 <input type="button" value="検索" onclick="searchAddress()">
+<input type="button" value="現在位置" onclick="currentLocation()">
 <h1>top</h1>
 <!--< %= form_with model:@post, local:true do |f| %>-->
 <!--  < %= f.text_field :name %>-->
@@ -33,7 +34,7 @@
   <%= f.text_field :name %>
   <%= f.label :introduction, "コメント" %>
   <%= f.text_area :introduction %>
-  <%= f.hidden_field :user_id, value: current_user.id %>
+  <%#= f.hidden_field :user_id, value: current_user.id %>
   <!--< %= f.label :star, "評価" %>-->
   <!--<div id="rating-form">-->
   <!--  < %= f.hidden_field :star, :value => 'score' %>-->
@@ -115,20 +116,24 @@ function searchAddress(){
   });
 }
 
-// function searchAddress(){
-//   var geocoder = new google.maps.Geocoder();
-//   let searchMap = document.getElementById('search').value;
+function currentLocation(){
+  if(!navigator.geolocation){
+    infoWindow.setPosition(map.getCenter());
+    infoWindow.setContent('Geolocation に対応していません。');
+    infoWindow.open(map);
+  }
+  navigator.geolocation.getCurrentPosition(function(position) {
+    LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    map = new google.maps.Map(document.getElementById('map'),{
+      center: LatLng,
+      zoom: 14
+    });
+    marker = new google.maps.Marker({
+      map: map,
+      position: LatLng
+    });
+  });
+}
 
-//   geocoder.geocode( {'search': searchMap }, function(results, status) {
-//     if (status === 'OK' && results[0]){
-//       new google.maps.Map(target, {
-//         center: results[0].geometry.location,
-//         zoom: 14
-//       });
-//     }else{
-//       alert('失敗しました。理由:' + status);
-//     }
-//   });
-// }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV["GOOGLE_MAP_KEY"]%>&callback=initMap" async defer></script>
