@@ -2,16 +2,24 @@
 <%= attachment_image_tag @post, :image %>
 <%= @post.name %>
 <%= @post.introduction %>
-<%#= @post.star %>
+<div class="post-star" data-score="<%= @post.star %>"></div>
 <div id="like_buttons_<%=@post.id%>">
   <%= render 'likes/like', post: @post %>
 </div>
 
-<%= @post.user.name %>
+<%#= @post.user.name %>
 
 <% if @post.user == current_user %>
   <%= link_to "投稿を編集する", edit_post_path(@post) %>
   <%= link_to "投稿を削除する", post_path(@post), method: :delete %>
 <% end %>
-
+<script>
+  $('.post-star').raty({
+    readOnly: true,
+    score: function(){
+      return $(this).attr('data-score');
+    },
+    path: '/assets'
+  });
+</script>
 <!--右に地図とマーカーを表示-->

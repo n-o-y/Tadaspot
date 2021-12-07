@@ -1,7 +1,23 @@
 <h1>投稿編集</h1>
 <%= form_with model:@post, local:true do |f| %>
+  <%= f.attachment_field :image %>
+  <%= f.label :name, "スポット名" %>
   <%= f.text_field :name %>
+  <%= f.label :introduction, "コメント" %>
   <%= f.text_area :introduction %>
-  <%#= f.  star %>
-  <%= f.submit "変更を保存" %>
+  <%= f.hidden_field :user_id, value: current_user.id %>
+
+  <div id="rating-form">
+    <%= f.label :star, "評価" %>
+    <%= f.hidden_field :star, :value => 'score' %>
+  </div>
+  <%= f.submit "投稿を更新する" %>
 <% end %>
+<script>
+  $('#rating-form').raty({
+    starOn: "<%= asset_path('star-on.png') %>",
+    starOff: "<%= asset_path('star-off.png') %>",
+    starHalf: "<%= asset_path('star-half.png') %>",
+    scoreName: 'post[star]' //登録するモデル名とカラム名を記述
+  });
+</script>

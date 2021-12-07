@@ -19,6 +19,9 @@
   <%= post.introduction %>
   <div class="post-star" data-score="<%= post.star %>"></div>
   <%#= post.user.name %>
+  <div id="like_buttons_<%=post.id%>">
+  <%= render 'likes/like', post: post %>
+  </div>
   <%= post.latitude %>
   <%= post.longitude %>
   <%= link_to "投稿詳細", post_path(post.id) %>
@@ -44,7 +47,7 @@
   <%= f.text_field :name %>
   <%= f.label :introduction, "コメント" %>
   <%= f.text_area :introduction %>
-  <%= f.hidden_field :user_id, value: current_user.id %>
+  <%#= f.hidden_field :user_id, value: current_user.id %>
 
   <div id="rating-form">
     <%= f.label :star, "評価" %>
