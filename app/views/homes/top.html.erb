@@ -1,32 +1,114 @@
 <input id="search" type="textbox" placeholder="検索">
 <input type="button" value="検索" onclick="searchAddress()">
 <input type="button" value="現在位置" onclick="currentLocation()">
-<h1>top</h1>
-<!--< %= form_with model:@post, local:true do |f| %>-->
-<!--  < %= f.text_field :name %>-->
-<!--  < %= f.label :コメント %>-->
-<!--  < %= f.text_field :introduction %>-->
-<!--  < %= f.label :緯度 %>-->
-<!--  < %= f.text_field :latitude %>-->
-<!--  < %= f.text_field :longitude %>-->
-<!--  < %= f.submit '投稿' %>-->
-<!--< % end %>-->
-<% @posts.each do |post| %>
-  <div>
-  <%= attachment_image_tag post, :image, size: "100x100" %>
-  <%= post.id %>
-  <%= post.name %>
-  <%= post.introduction %>
-  <div class="post-star" data-score="<%= post.star %>"></div>
-  <%#= post.user.name %>
-  <div id="like_buttons_<%=post.id%>">
-  <%= render 'likes/like', post: post %>
+
+<div id='map', style="height: 400px;, width: 600px;"></div>
+<script>
+  let map
+  let geocoder
+  let marker
+
+  function initMap(){
+    geocoder = new google.maps.Geocoder()
+
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: {
+        lat: 35.681,
+        lng: 139.767
+      },
+      zoom: 14
+    });
+
+    <% @posts.each do |post| %>
+      pos = new google.maps.LatLng(
+        <%= post.latitude %>,
+        <%= post.longitude %>
+        );
+        default_marker = new google.maps.Marker({
+          map: map,
+          position: pos,
+        });
+    <% end %>
+  }
+
+  function codeAddress(){
+    let inputAddress = document.getElementById('address').value;
+
+    geocoder.geocode( { 'address': inputAddress}, function(results, status) {
+      if (status == 'OK') {
+        map.setCenter(results[0].geometry.location);
+        if(marker != null){
+          marker.setMap(null);
+        }
+        marker = null;
+        marker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location
+        });
+        let post_name = document.getElementById('post_name');
+        post_name.setAttribute("value", inputAddress);
+        let hidden_address = document.getElementById('hidden_address');
+        hidden_address.setAttribute("value", inputAddress);
+      } else {
+        alert('Geocode was not successful for the following reason: ' + status);
+      }
+    });
+  }
+
+  function searchAddress(){
+    let inputSearchAddress = document.getElementById('search').value;
+
+    geocoder.geocode( { 'address': inputSearchAddress }, function(results, status) {
+      if (status == 'OK') {
+        map.setCenter(results[0].geometry.location);
+      } else {
+        alert('Geocode was not successful for the following reason: ' + status);
+      }
+    });
+}
+
+  function currentLocation(){
+    navigator.geolocation.getCurrentPosition(function(position) {
+      LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      map = new google.maps.Map(document.getElementById('map'),{
+        center: LatLng,
+        zoom: 14
+      });
+      marker = new google.maps.Marker({
+        map: map,
+        position: LatLng
+      });
+    });
+  }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV["GOOGLE_MAP_KEY"]%>&callback=initMap" async defer></script>
+
+<div class="row">
+  <% @posts.each do |post| %>
+  <div class="col-2 d-flex flex-column">
+    <div>
+      <%= attachment_image_tag post, :image, size: "100x100", fallback: "no_image.jpg" %>
+    </div>
+    <div>
+      <%= post.name %>
+    </div>
+    <div class="post-star" data-score="<%= post.star %>"></div>
+    <div>
+      <%= post.introduction %>
+    </div>
+    <div>
+      <%= post.user.name %>
+    </div>
+    <div id="like_buttons_<%=post.id%>">
+      <%= render 'likes/like', post: post %>
+    </div>
+    <div>
+      <%= link_to "投稿詳細", post_path(post.id) %>
+    </div>
   </div>
-  <%= post.latitude %>
-  <%= post.longitude %>
-  <%= link_to "投稿詳細", post_path(post.id) %>
-  </div>
-<% end %>
+  <% end %>
+</div>
+
 <script>
   $('.post-star').raty({
     readOnly: true,
@@ -47,108 +129,21 @@
   <%= f.text_field :name %>
   <%= f.label :introduction, "コメント" %>
   <%= f.text_area :introduction %>
-  <%#= f.hidden_field :user_id, value: current_user.id %>
-
+  <%= f.hidden_field :user_id, value: current_user.id %>
   <div id="rating-form">
     <%= f.label :star, "評価" %>
     <%= f.hidden_field :star, :value => 'score' %>
   </div>
   <%= f.submit "投稿する" %>
 <% end %>
-
-
-<div id='map', style="height: 400px;, width: 600px;"></div>
-<!--<div><%#= render @posts %></div>-->
-<script>
-let map
-let geocoder
-let marker
-
-function initMap(){
-  geocoder = new google.maps.Geocoder()
-
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: {
-      lat: 35.681,
-      lng: 139.767
-    },
-    zoom: 14
-  });
-
-  <% @posts.each do |post| %>
-    pos = new google.maps.LatLng(
-      <%= post.latitude %>,
-      <%= post.longitude %>
-      );
-      default_marker = new google.maps.Marker({
-        map: map,
-        position: pos,
-      });
-  <% end %>
-}
-
-function codeAddress(){
-  let inputAddress = document.getElementById('address').value;
-
-  geocoder.geocode( { 'address': inputAddress}, function(results, status) {
-    if (status == 'OK') {
-      map.setCenter(results[0].geometry.location);
-      if(marker != null){
-        marker.setMap(null);
-      }
-      marker = null;
-      marker = new google.maps.Marker({
-          map: map,
-          position: results[0].geometry.location
-      });
-      let post_name = document.getElementById('post_name');
-      post_name.setAttribute("value", inputAddress);
-      let hidden_address = document.getElementById('hidden_address');
-      hidden_address.setAttribute("value", inputAddress);
-    } else {
-      alert('Geocode was not successful for the following reason: ' + status);
-    }
-  });
-}
-
-function searchAddress(){
-  let inputSearchAddress = document.getElementById('search').value;
-
-  geocoder.geocode( { 'address': inputSearchAddress }, function(results, status) {
-    if (status == 'OK') {
-      map.setCenter(results[0].geometry.location);
-    } else {
-      alert('Geocode was not successful for the following reason: ' + status);
-    }
-  });
-}
-
-function currentLocation(){
-  // if(!navigator.geolocation){
-  //   infoWindow.setPosition(map.getCenter());
-  //   infoWindow.setContent('Geolocation に対応していません。');
-  //   infoWindow.open(map);
-  // }
-  navigator.geolocation.getCurrentPosition(function(position) {
-    LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-    map = new google.maps.Map(document.getElementById('map'),{
-      center: LatLng,
-      zoom: 14
-    });
-    marker = new google.maps.Marker({
-      map: map,
-      position: LatLng
-    });
-  });
-}
-
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV["GOOGLE_MAP_KEY"]%>&callback=initMap" async defer></script>
 <script>
   $('#rating-form').raty({
     starOn: "<%= asset_path('star-on.png') %>",
     starOff: "<%= asset_path('star-off.png') %>",
     starHalf: "<%= asset_path('star-half.png') %>",
-    scoreName: 'post[star]' //登録するモデル名とカラム名を記述
+    scoreName: 'post[star]'
   });
 </script>
+
+
+<!--<div><%#= render @posts %></div>-->
