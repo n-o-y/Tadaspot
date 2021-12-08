@@ -1,6 +1,13 @@
 class Post < ApplicationRecord
-  belongs_to :user, optional: true
-  has_many :likes
+  belongs_to :user
+  has_many :likes, dependent: :destroy
+
+  validates :name, presence: true
+  validates :introduction, presence: true
+  validates :latitude, presence: true
+  validates :longitude, presence: true
+  validates :star, presence: true
+
   attachment :image
 
   geocoded_by :name
