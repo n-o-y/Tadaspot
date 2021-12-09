@@ -21,6 +21,12 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav mx-auto">
+              <input id="search" type="textbox" placeholder="検索">
+              <input type="button" value="検索" onclick="searchAddress()">
+              <input type="button" value="現在位置" onclick="currentLocation()">
+              <input id="address" type="textbox" value="" placeholder="場所を入力">
+<input type="button" value="探す" onclick="codeAddress()">
+
               <% if user_signed_in? %>
                 <li class="nav-item">
                   <%= link_to "投稿する", new_post_path, class:"nav-link text-dark" %>
