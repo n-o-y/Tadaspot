@@ -1,19 +1,28 @@
-<h1>投稿詳細</h1>
-<%= attachment_image_tag @post, :image %>
-<%= @post.name %>
-<%= @post.introduction %>
-<div class="post-star" data-score="<%= @post.star %>"></div>
-<div id="like_buttons_<%=@post.id%>">
-  <%= render 'likes/like', post: @post %>
-</div>
-
-<%#= @post.user.name %>
-
-<% if @post.user == current_user %>
-  <%= link_to "投稿を編集する", edit_post_path(@post) %>
-  <%= link_to "投稿を削除する", post_path(@post), method: :delete %>
-<% end %>
-<script>
+<div class="container-fluid border">
+  <div class="row border">
+    <div class="border col-3">
+      <div class="row my-2" style="width: 300px; height: 200px;">
+        <%= attachment_image_tag @post, :image, size:"300x200" %>
+      </div>
+      <div class="row my-2">
+        <%= @post.name %>
+      </div>
+      <div class=" row my-2 post-star" data-score="<%= @post.star %>"></div>
+      <div class="row my-2">
+        <%= @post.introduction %>
+      </div>
+      <div>
+        <%= @post.user.name %>
+      </div>
+      <div id="like_buttons_<%=@post.id%>">
+        <%= render 'likes/like', post: @post %>
+      </div>
+      <% if @post.user == current_user %>
+        <%= link_to "投稿を編集する", edit_post_path(@post) %>
+        <%= link_to "投稿を削除する", post_path(@post), method: :delete %>
+      <% end %>
+    </div>
+   <script>
   $('.post-star').raty({
     readOnly: true,
     score: function(){
@@ -22,4 +31,76 @@
     path: '/assets'
   });
 </script>
-<!--右に地図とマーカーを表示-->
+    <div class="col-9" id='map'></div>
+  </div>
+</div>
+
+<script>
+  let map
+  let geocoder
+  let marker
+
+  function initMap(){
+    geocoder = new google.maps.Geocoder()
+
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: {
+        lat: 35.681,
+        lng: 139.767
+      },
+      zoom: 14
+    });
+  }
+
+  function codeAddress(){
+    let inputAddress = document.getElementById('address').value;
+
+    geocoder.geocode( { 'address': inputAddress}, function(results, status) {
+      if (status == 'OK') {
+        map.setCenter(results[0].geometry.location);
+        if(marker != null){
+          marker.setMap(null);
+        }
+        marker = null;
+        marker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location
+        });
+        let post_name = document.getElementById('post_name');
+        post_name.setAttribute("value", inputAddress);
+        let hidden_address = document.getElementById('hidden_address');
+        hidden_address.setAttribute("value", inputAddress);
+      } else {
+        alert('Geocode was not successful for the following reason: ' + status);
+      }
+    });
+  }
+
+  function searchAddress(){
+    let inputSearchAddress = document.getElementById('search').value;
+
+    geocoder.geocode( { 'address': inputSearchAddress }, function(results, status) {
+      if (status == 'OK') {
+        map.setCenter(results[0].geometry.location);
+      } else {
+        alert('Geocode was not successful for the following reason: ' + status);
+      }
+    });
+}
+
+  function currentLocation(){
+    navigator.geolocation.getCurrentPosition(function(position) {
+      LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      map = new google.maps.Map(document.getElementById('map'),{
+        center: LatLng,
+        zoom: 14
+      });
+      marker = new google.maps.Marker({
+        map: map,
+        position: LatLng
+      });
+    });
+  }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV["GOOGLE_MAP_KEY"]%>&callback=initMap" async defer></script>
+
