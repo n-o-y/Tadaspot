@@ -9,12 +9,11 @@ class PostsController < ApplicationController
 
   def create
     @post = Post.new(post_params)
-    # binding.pry
     if @post.save
-      redirect_to root_path
+      redirect_to post_path(@post)
     else
       @posts = Post.all
-      render root_path
+      render :new
     end
   end
 
