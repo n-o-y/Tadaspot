@@ -1,9 +1,10 @@
-<div class="container border">
-  <div class="row mx-auto border justify-content-center">
-    <h2>ログイン</h2>
+<div class="container">
+  <div class="row mx-auto my-4 justify-content-center align-items-center">
+    <%= image_tag 'logo.png', size: '175x70'%>
+    <h2 class="ml-2">ログイン</h2>
   </div>
-  <div class="row mx-auto border">
-    <div class="col-6 mx-auto border d-flex justify-content-center">
+  <div class="row mx-auto">
+    <div class="col-6 mx-auto py-4 border d-flex justify-content-center shadow">
       <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
         <div class="field">
           <%= f.label :メールアドレス %><br />
@@ -15,20 +16,13 @@
           <%= f.password_field :password, autocomplete: "current-password" %>
         </div>
 
-        <!--<%# if devise_mapping.rememberable? %>-->
-        <!--  <div class="field">-->
-        <!--    <%#= f.check_box :remember_me %>-->
-        <!--    <%#= f.label :remember_me %>-->
-        <!--  </div>-->
-        <!--<#% end %>-->
-
-        <div class="actions">
-          <%= f.submit "ログイン", class:"btn-success" %>
+        <div class="actions text-right mt-2">
+          <%= f.submit "ログイン", class:"btn-success rounded" %>
         </div>
       <% end %>
     </div>
   </div>
-  <div class="row">
-    <p class="col">ユーザ登録がお済でない方はこちらから新規登録</p>
+  <div class="row my-4">
+    <p class="mx-auto">ユーザ登録がお済でない方は<%= link_to "こちら", new_user_registration_path %>から新規登録</p>
   </div>
 </div>

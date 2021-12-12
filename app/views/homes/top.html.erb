@@ -85,7 +85,7 @@
   <div class="col-2 d-flex flex-column">
   <%= link_to post_path(post.id) do %>
     <div>
-      <%= attachment_image_tag post, :image, size: "100x100", fallback: "no_image.jpg" %>
+      <%= attachment_image_tag post, :image, size: "100x100", style:"object-fit: contain;", fallback: "no_image.png" %>
     </div>
     <div>
       <%= post.name %>
