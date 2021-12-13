@@ -43,15 +43,55 @@
 
   function initMap(){
     geocoder = new google.maps.Geocoder()
+    post_LatLng = new google.maps.LatLng(
+        <%= @post.latitude %>,
+        <%= @post.longitude %>
+        );
+    map = new google.maps.Map(document.getElementById('map'),{
+        center: post_LatLng,
+        zoom: 14
+      });
+    // map = new google.maps.Map(document.getElementById('map'), {
+    //   center: {
+    //     lat: 35.681,
+    //     lng: 139.767
+    //   },
+    //   zoom: 14
+    // });
 
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: {
-        lat: 35.681,
-        lng: 139.767
-      },
-      zoom: 14
-    });
-    
+    // navigator.geolocation.getCurrentPosition(function(position) {
+      // LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+
+      // marker = new google.maps.Marker({
+      //   map: map,
+      //   position: LatLng
+      // });
+      // console.log(marker);
+      <% @posts.each do |post| %>
+        pos = new google.maps.LatLng(
+          <%= post.latitude %>,
+          <%= post.longitude %>
+          );
+          default_marker = new google.maps.Marker({
+            map: map,
+            position: pos,
+          });
+      <% end %>
+    // });
+
+
+    // < % @posts.each do |post| %>
+    //   pos = new google.maps.LatLng(
+    //     < %= post.latitude %>,
+    //     < %= post.longitude %>
+    //     );
+    //     default_marker = new google.maps.Marker({
+    //       map: map,
+    //       position: pos,
+    //     });
+    // < % end %>
+
   }
 
   function codeAddress(){
