@@ -20,18 +20,35 @@
         center: LatLng,
         zoom: 14
       });
+      // marker = new google.maps.Marker({
+      //   map: map,
+      //   position: LatLng
+      // });
+      // console.log(marker);
+      <% @posts.each do |post| %>
+        pos = new google.maps.LatLng(
+          <%= post.latitude %>,
+          <%= post.longitude %>
+          );
+          default_marker = new google.maps.Marker({
+            map: map,
+            position: pos,
+          });
+      <% end %>
     });
 
-    <% @posts.each do |post| %>
-      pos = new google.maps.LatLng(
-        <%= post.latitude %>,
-        <%= post.longitude %>
-        );
-        default_marker = new google.maps.Marker({
-          map: map,
-          position: pos,
-        });
-    <% end %>
+
+    // < % @posts.each do |post| %>
+    //   pos = new google.maps.LatLng(
+    //     < %= post.latitude %>,
+    //     < %= post.longitude %>
+    //     );
+    //     default_marker = new google.maps.Marker({
+    //       map: map,
+    //       position: pos,
+    //     });
+    // < % end %>
+
   }
 
   function codeAddress(){
