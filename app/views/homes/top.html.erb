@@ -79,13 +79,13 @@
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV["GOOGLE_MAP_KEY"]%>&callback=initMap" async defer></script>
 
-<div class="row">
+<div class="row my-3">
   <% @posts.each do |post| %>
 
-  <div class="col-2 d-flex flex-column">
-  <%= link_to post_path(post.id) do %>
+  <div class="col-2 d-flex flex-column border shadow mx-1">
+  <%= link_to post_path(post.id), style:"text-decoration: none; color: black;" do %>
     <div>
-      <%= attachment_image_tag post, :image, size: "100x100", style:"object-fit: contain;", fallback: "no_image.png" %>
+      <%= attachment_image_tag post, :image, size: "150x100", style:"object-fit: contain;", fallback: "no_image.png" %>
     </div>
     <div>
       <%= post.name %>

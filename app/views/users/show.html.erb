@@ -1,22 +1,69 @@
-<h1>マイページ</h1>
-
-<%= link_to "登録情報編集", edit_user_registration_path %>
-<% @posts.each do |post| %>
-  <%= attachment_image_tag post, :image, size:"100x100" %>
-  <%= post.name %>
-  <%= post.introduction %>
-  <%= link_to "投稿詳細", post_path(post) %>
-  <div id="like_buttons_<%=post.id%>">
-    <%= render 'likes/like', post: post %>
+<div class="container">
+  <div class="row my-5 justify-content-between">
+    <h2 class="col-5"><%= current_user.name %>さんのマイページ</h2>
+    <%= link_to "登録情報を編集する", edit_user_registration_path, class:"btn btn-info col-2" %>
   </div>
-<% end %>
-
-<% @post_like.each do |post| %>
-  <%= attachment_image_tag post, :image, size:"100x100" %>
-  <%= post.name %>
-  <%= post.introduction %>
-  <%= link_to "投稿詳細", post_path(post) %>
-  <div id="like_buttons_<%=post.id%>">
-    <%= render 'likes/like', post: post %>
+  <div class="row">
+    <h3>投稿一覧</h3>
   </div>
-<% end %>
+  <div class="row my-3">
+    <% @posts.each do |post| %>
+      <div class="col-2 d-flex flex-column border shadow mx-1">
+        <%= link_to post_path(post.id), style:"text-decoration: none; color: black;" do %>
+          <div>
+            <%= attachment_image_tag post, :image, size: "150x100", style:"object-fit: contain;", fallback: "no_image.png" %>
+          </div>
+          <div>
+            <%= post.name %>
+          </div>
+          <div class="post-star" data-score="<%= post.star %>"></div>
+          <div>
+            <%= post.introduction %>
+          </div>
+          <div>
+            <%= post.user.name %>
+          </div>
+          <div id="like_buttons_<%=post.id%>">
+            <%= render 'likes/like', post: post %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <div class="row mt-5">
+    <h3>いいね一覧</h3>
+  </div>
+  <div class="row mt-3 mb-5">
+    <% @post_like.each do |post| %>
+      <div class="col-2 d-flex flex-column border shadow mx-1">
+        <%= link_to post_path(post.id), style:"text-decoration: none; color: black;" do %>
+          <div>
+            <%= attachment_image_tag post, :image, size: "150x100", style:"object-fit: contain;", fallback: "no_image.png" %>
+          </div>
+          <div>
+            <%= post.name %>
+          </div>
+          <div class="post-star" data-score="<%= post.star %>"></div>
+          <div>
+            <%= post.introduction %>
+          </div>
+          <div>
+            <%= post.user.name %>
+          </div>
+          <div id="like_buttons_<%=post.id%>">
+            <%= render 'likes/like', post: post %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+<script>
+  $('.post-star').raty({
+    readOnly: true,
+    score: function(){
+      return $(this).attr('data-score');
+    },
+    path: '/assets'
+  });
+</script>
