@@ -107,10 +107,10 @@
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV["GOOGLE_MAP_KEY"]%>&callback=initMap" async defer></script>
 
-<div class="row my-3">
+<div class="row my-3 post-list">
   <% @posts.each do |post| %>
 
-  <div class="col-2 d-flex flex-column border shadow mx-1">
+  <div class="col col-2 d-flex flex-column border shadow mx-1">
   <%= link_to post_path(post.id), style:"text-decoration: none; color: black;" do %>
     <div>
       <%= attachment_image_tag post, :image, size: "150x100", style:"object-fit: contain;", fallback: "no_image.png" %>
@@ -132,7 +132,7 @@
 
   </div>
   <% end %>
-  <%= paginate @posts %>
+    <%= paginate @posts %>
 </div>
 
 <script>
@@ -143,4 +143,13 @@
     },
     path: '/assets'
   });
+</script>
+
+<script>
+   $(function() {
+     $('.jscroll').jscroll({
+       contentSelector: '.post-list',
+       nextSelector: 'span.next: last a'
+     });
+   });
 </script>

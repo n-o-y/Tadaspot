@@ -4,6 +4,7 @@
     <title>Tadaspot</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jscroll/2.4.1/jquery.jscroll.min.js"></script>-->
     <script src="https://kit.fontawesome.com/98511c5727.js" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -13,7 +14,7 @@
   </head>
 
   <body class="vh-100">
-    <header class="shadow-sm border-bottom">
+    <header class="shadow-sm border-bottom" style="background-color: khaki;">
       <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
           <a class="navbar-brand" href="/"><%= image_tag 'logo.png', size: '125x50' %></a>
@@ -53,10 +54,12 @@
       </nav>
     </header>
     <%= yield %>
-    <footer class="bg-dark" style="height: 50px;">
-      <p class="text-light mx-auto text-center">
-        Tadaspot
-      </p>
+    <footer class="container-fluid" style="height: 150px; background-color: khaki;">
+      <div class="row">
+        <p class="mx-auto my-5 text-center">
+          Tadaspot
+        </p>
+      </div>
     </footer>
   </body>
 </html>
