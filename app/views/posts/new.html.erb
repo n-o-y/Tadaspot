@@ -44,6 +44,7 @@
   let map
   let geocoder
   let marker
+  let clickMarker
 
   function initMap(){
     geocoder = new google.maps.Geocoder()
@@ -62,12 +63,24 @@
   }
 
   function getClickLatLng(lat_lng, map) {
+    // let clickMarker;
     document.getElementById('getlat').textContent = lat_lng.lat();
     document.getElementById('getlng').textContent = lat_lng.lng();
-    let marker = new google.maps.Marker({
+    console.log(clickMarker != null);
+    if (clickMarker != null){
+      clickMarker.setMap(null);
+    }
+    clickMarker = null;
+    // console.log(clickMarker != null);
+    clickMarker = new google.maps.Marker({
       position: lat_lng,
       map: map
     });
+    // console.log(clickMarker != null);
+    // if (clickMarker != null){
+    //   clickMarker.setMap(null);
+    // }
+    // clickMarker = null;
     let postLat = document.getElementById('postLat')
     postLat.value = lat_lng.lat();
     let postLng = document.getElementById('postLng')
