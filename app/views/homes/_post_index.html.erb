@@ -1,0 +1,46 @@
+<div class="row my-3 post-list">
+  <% @posts.each do |post| %>
+
+  <div class="col col-2 d-flex flex-column border shadow mx-1">
+  <%= link_to post_path(post.id), style:"text-decoration: none; color: black;" do %>
+    <div>
+      <%= attachment_image_tag post, :image, size: "150x100", style:"object-fit: contain;", fallback: "no_image.png" %>
+    </div>
+    <div>
+      <%= post.name %>
+    </div>
+    <div class="post-star" data-score="<%= post.star %>"></div>
+    <div>
+      <%= post.introduction %>
+    </div>
+    <div>
+      <%= post.user.name %>
+    </div>
+    <div id="like_buttons_<%=post.id%>">
+      <%= render 'likes/like', post: post %>
+    </div>
+  <% end %>
+
+  </div>
+  <% end %>
+    <%= paginate @posts, remote: true %>
+</div>
+
+<script>
+  $('.post-star').raty({
+    readOnly: true,
+    score: function(){
+      return $(this).attr('data-score');
+    },
+    path: '/assets'
+  });
+</script>
+
+<script>
+   $(function() {
+     $('.jscroll').jscroll({
+       contentSelector: '.post-list',
+       nextSelector: 'span.next: last a'
+     });
+   });
+</script>

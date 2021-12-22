@@ -140,6 +140,7 @@
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV["GOOGLE_MAP_KEY"]%>&callback=initMap" async defer></script>
 
+<div id="pagenate">
 <div class="row my-3 post-list">
   <% @posts.each do |post| %>
 
@@ -165,7 +166,7 @@
 
   </div>
   <% end %>
-    <%= paginate @posts %>
+    <%= paginate @posts, remote: true %>
 </div>
 
 <script>
@@ -186,3 +187,4 @@
      });
    });
 </script>
+</div>
