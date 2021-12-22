@@ -112,17 +112,17 @@
     });
   }
 
-  function searchAddress(){
-    let inputSearchAddress = document.getElementById('search').value;
+  // function searchAddress(){
+  //   let inputSearchAddress = document.getElementById('search').value;
 
-    geocoder.geocode( { 'address': inputSearchAddress }, function(results, status) {
-      if (status == 'OK') {
-        map.setCenter(results[0].geometry.location);
-      } else {
-        alert('Geocode was not successful for the following reason: ' + status);
-      }
-    });
-}
+  //   geocoder.geocode( { 'address': inputSearchAddress }, function(results, status) {
+  //     if (status == 'OK') {
+  //       map.setCenter(results[0].geometry.location);
+  //     } else {
+  //       alert('Geocode was not successful for the following reason: ' + status);
+  //     }
+  //   });
+  // }
 
   function currentLocation(){
     navigator.geolocation.getCurrentPosition(function(position) {

@@ -16,6 +16,10 @@
       <div class="row my-2">
         <%= f.text_area :introduction, placeholder:"コメントを入力" %>
       </div>
+      <ul>
+        <li>lat: <span id="getlat"></span></li>
+        <li>lng: <span id="getlng"></span></li>
+      </ul>
       <%= f.hidden_field :user_id, value: current_user.id %>
       <div class="row my-2">
         <%= f.submit "投稿する", class:"btn btn-success" %>
@@ -49,6 +53,19 @@
       },
       zoom: 14
     });
+
+    map.addListener('click', function(e) {
+      getClickLatLng(e.latLng, map);
+    });
+  }
+
+  function getClickLatLng(lat_lng, map) {
+    document.getElementById('getlat').textContent = lat_lng.lat();
+    document.getElementById('getlng').textContent = lat_lng.lng();
+    let marker = new google.maps.Marker({
+      position: lat_lng,
+      map: map
+    });
   }
 
   function codeAddress(){
@@ -75,17 +92,17 @@
     });
   }
 
-  function searchAddress(){
-    let inputSearchAddress = document.getElementById('search').value;
+  // function searchAddress(){
+  //   let inputSearchAddress = document.getElementById('search').value;
 
-    geocoder.geocode( { 'address': inputSearchAddress }, function(results, status) {
-      if (status == 'OK') {
-        map.setCenter(results[0].geometry.location);
-      } else {
-        alert('Geocode was not successful for the following reason: ' + status);
-      }
-    });
-}
+  //   geocoder.geocode( { 'address': inputSearchAddress }, function(results, status) {
+  //     if (status == 'OK') {
+  //       map.setCenter(results[0].geometry.location);
+  //     } else {
+  //       alert('Geocode was not successful for the following reason: ' + status);
+  //     }
+  //   });
+// }
 
   function currentLocation(){
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -99,6 +116,13 @@
         position: LatLng
       });
     });
+
+    map.addListener('click', function(e) {
+      getClickLatLng(e.latLng, map);
+    });
+    // let hidden_address = document.getElementById('hidden_address');
+    // hidden_address.setAttribute("value", inputAddress);
+    // console.log(hidden_address['value']);
   }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV["GOOGLE_MAP_KEY"]%>&callback=initMap" async defer></script>
