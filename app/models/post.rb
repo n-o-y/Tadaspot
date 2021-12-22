@@ -10,8 +10,8 @@ class Post < ApplicationRecord
 
   attachment :image
 
-  geocoded_by :name
-  before_validation :geocode
+  # geocoded_by :name
+  # before_validation :geocode
 
   def liked_by?(user)
     likes.where(user_id: user.id).exists?

@@ -17,9 +17,11 @@
         <%= f.text_area :introduction, placeholder:"コメントを入力" %>
       </div>
       <ul>
-        <li>lat: <span id="getlat"></span></li>
-        <li>lng: <span id="getlng"></span></li>
+        <li id="getlat"></li>
+        <li id="getlng"></li>
       </ul>
+      <%= f.hidden_field :latitude, id:"postLat" %>
+      <%= f.hidden_field :longitude, id:"postLng" %>
       <%= f.hidden_field :user_id, value: current_user.id %>
       <div class="row my-2">
         <%= f.submit "投稿する", class:"btn btn-success" %>
@@ -66,43 +68,47 @@
       position: lat_lng,
       map: map
     });
+    let postLat = document.getElementById('postLat')
+    postLat.value = lat_lng.lat();
+    let postLng = document.getElementById('postLng')
+    postLng.value = lat_lng.lng();
   }
 
-  function codeAddress(){
-    let inputAddress = document.getElementById('address').value;
+  // function codeAddress(){
+  //   let inputAddress = document.getElementById('address').value;
 
-    geocoder.geocode( { 'address': inputAddress}, function(results, status) {
+  //   geocoder.geocode( { 'address': inputAddress}, function(results, status) {
+  //     if (status == 'OK') {
+  //       map.setCenter(results[0].geometry.location);
+  //       if(marker != null){
+  //         marker.setMap(null);
+  //       }
+  //       marker = null;
+  //       marker = new google.maps.Marker({
+  //           map: map,
+  //           position: results[0].geometry.location
+  //       });
+  //       let post_name = document.getElementById('post_name');
+  //       post_name.setAttribute("value", inputAddress);
+  //       let hidden_address = document.getElementById('hidden_address');
+  //       hidden_address.setAttribute("value", inputAddress);
+  //     } else {
+  //       alert('Geocode was not successful for the following reason: ' + status);
+  //     }
+  //   });
+  // }
+
+  function searchAddress(){
+    let inputSearchAddress = document.getElementById('search').value;
+
+    geocoder.geocode( { 'address': inputSearchAddress }, function(results, status) {
       if (status == 'OK') {
         map.setCenter(results[0].geometry.location);
-        if(marker != null){
-          marker.setMap(null);
-        }
-        marker = null;
-        marker = new google.maps.Marker({
-            map: map,
-            position: results[0].geometry.location
-        });
-        let post_name = document.getElementById('post_name');
-        post_name.setAttribute("value", inputAddress);
-        let hidden_address = document.getElementById('hidden_address');
-        hidden_address.setAttribute("value", inputAddress);
       } else {
         alert('Geocode was not successful for the following reason: ' + status);
       }
     });
   }
-
-  // function searchAddress(){
-  //   let inputSearchAddress = document.getElementById('search').value;
-
-  //   geocoder.geocode( { 'address': inputSearchAddress }, function(results, status) {
-  //     if (status == 'OK') {
-  //       map.setCenter(results[0].geometry.location);
-  //     } else {
-  //       alert('Geocode was not successful for the following reason: ' + status);
-  //     }
-  //   });
-// }
 
   function currentLocation(){
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -117,10 +123,10 @@
       });
     });
 
-    map.addListener('click', function(e) {
-      getClickLatLng(e.latLng, map);
-    });
-    // let hidden_address = document.getElementById('hidden_address');
+    // map.addListener('click', function(e) {
+    //   getClickLatLng(e.latLng, map);
+    // });
+    // // let hidden_address = document.getElementById('hidden_address');
     // hidden_address.setAttribute("value", inputAddress);
     // console.log(hidden_address['value']);
   }
