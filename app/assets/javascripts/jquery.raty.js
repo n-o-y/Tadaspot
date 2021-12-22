@@ -18,7 +18,6 @@
     factory(root.jQuery);
   }
 }(this, function($) {
-  console.log("test")
   'use strict';
 
   $.raty = {
@@ -58,7 +57,7 @@
     targetText:   '',
     targetType:   'hint'
   };
-  
+
 
   $.fn.raty = function(options) {
     return this.each(function() {

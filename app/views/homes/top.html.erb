@@ -1,8 +1,11 @@
+<%= include_gon %>
+<%= javascript_include_tag "application" %>
 <div id='map', style="height: 400px;, width: 600px;"></div>
 <script>
-  let map
-  let geocoder
-  let marker
+  let map;
+  let geocoder;
+  let marker = [];
+  let infoWindow = [];
 
   function initMap(){
     geocoder = new google.maps.Geocoder()
@@ -20,21 +23,51 @@
         center: LatLng,
         zoom: 14
       });
+
+    let markerData = gon.posts;
+
+    console.log(gon.posts);
+    console.log(gon.posts[1]['latitude']);
+
+    for (let i = 0; i < markerData.length; i++) {
+      // let markerLatLng = new google.maps.LatLng({lat: markerData[i]['latitude'], lng: markerData[i]['longitude']});
+      let markerLatLng = {lat: parseFloat( markerData[i]['latitude'] ), lng: parseFloat( markerData[i]['longitude'] )};
+      // console.log(markerLatLng);
+      marker[i] = new google.maps.Marker({
+        map: map,
+        position: markerLatLng
+      });
+
+      const postId = markerData[i]['id'];
+      infoWindow[i] = new google.maps.InfoWindow({
+        content: '<a href="/posts/' + postId + '">' + markerData[i]['name'] + '</a>'
+      });
+
+      markerEvent(i);
+
+    }
+
+    function markerEvent(i) {
+      marker[i].addListener('click', function() {
+        infoWindow[i].open(map, marker[i]);
+      });
+    }
+
       // marker = new google.maps.Marker({
       //   map: map,
       //   position: LatLng
       // });
       // console.log(marker);
-      <% @posts.each do |post| %>
-        pos = new google.maps.LatLng(
-          <%= post.latitude %>,
-          <%= post.longitude %>
-          );
-          default_marker = new google.maps.Marker({
-            map: map,
-            position: pos,
-          });
-      <% end %>
+      // < % @posts.each do |post| %>
+      //   pos = new google.maps.LatLng(
+      //     < %= post.latitude %>,
+      //     < %= post.longitude %>
+      //     );
+      //     default_marker = new google.maps.Marker({
+      //       map: map,
+      //       position: pos,
+      //     });
+      // < % end %>
     });
 
 
