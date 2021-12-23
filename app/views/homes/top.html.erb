@@ -8,14 +8,7 @@
   let infoWindow = [];
 
   function initMap(){
-    geocoder = new google.maps.Geocoder()
-    // map = new google.maps.Map(document.getElementById('map'), {
-    //   center: {
-    //     lat: 35.681,
-    //     lng: 139.767
-    //   },
-    //   zoom: 14
-    // });
+    geocoder = new google.maps.Geocoder();
 
     navigator.geolocation.getCurrentPosition(function(position) {
       LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -24,105 +17,43 @@
         zoom: 14
       });
 
-    let markerData = gon.posts;
+      let markerData = gon.posts;
 
-    console.log(gon.posts);
-    console.log(gon.posts[1]['latitude']);
+      for (let i = 0; i < markerData.length; i++) {
+        let markerLatLng = {lat: parseFloat( markerData[i]['latitude'] ), lng: parseFloat( markerData[i]['longitude'] )};
+        marker[i] = new google.maps.Marker({
+          map: map,
+          position: markerLatLng
+        });
 
-    for (let i = 0; i < markerData.length; i++) {
-      // let markerLatLng = new google.maps.LatLng({lat: markerData[i]['latitude'], lng: markerData[i]['longitude']});
-      let markerLatLng = {lat: parseFloat( markerData[i]['latitude'] ), lng: parseFloat( markerData[i]['longitude'] )};
-      // console.log(markerLatLng);
-      marker[i] = new google.maps.Marker({
-        map: map,
-        position: markerLatLng
-      });
+        const postId = markerData[i]['id'];
+        infoWindow[i] = new google.maps.InfoWindow({
+          content: '<a href="/posts/' + postId + '">' + markerData[i]['name'] + '</a>'
+        });
 
-      const postId = markerData[i]['id'];
-      infoWindow[i] = new google.maps.InfoWindow({
-        content: '<a href="/posts/' + postId + '">' + markerData[i]['name'] + '</a>'
-      });
+        markerEvent(i);
 
-      markerEvent(i);
+      }
 
-    }
-
-    function markerEvent(i) {
-      marker[i].addListener('click', function() {
-        infoWindow[i].open(map, marker[i]);
-      });
-    }
-
-      // marker = new google.maps.Marker({
-      //   map: map,
-      //   position: LatLng
-      // });
-      // console.log(marker);
-      // < % @posts.each do |post| %>
-      //   pos = new google.maps.LatLng(
-      //     < %= post.latitude %>,
-      //     < %= post.longitude %>
-      //     );
-      //     default_marker = new google.maps.Marker({
-      //       map: map,
-      //       position: pos,
-      //     });
-      // < % end %>
+      function markerEvent(i) {
+        marker[i].addListener('click', function() {
+          infoWindow[i].open(map, marker[i]);
+        });
+      }
     });
-
-
-    // < % @posts.each do |post| %>
-    //   pos = new google.maps.LatLng(
-    //     < %= post.latitude %>,
-    //     < %= post.longitude %>
-    //     );
-    //     default_marker = new google.maps.Marker({
-    //       map: map,
-    //       position: pos,
-    //     });
-    // < % end %>
-
   }
 
-  // function codeAddress(){
-  //   let inputAddress = document.getElementById('address').value;
+  function searchAddress(){
+    let inputSearchAddress = document.getElementById('search').value;
 
-  //   geocoder.geocode( { 'address': inputAddress}, function(results, status) {
-  //     if (status == 'OK') {
-  //       map.setCenter(results[0].geometry.location);
-  //       if(marker != null){
-  //         marker.setMap(null);
-  //       }
-  //       marker = null;
-  //       marker = new google.maps.Marker({
-  //           map: map,
-  //           position: results[0].geometry.location,
-  //           icon: {
-  //             url: "https://maps.google.com/mapfiles/ms/micons/yellow-dot.png",
-  //             scaledSize: new google.maps.Size(40, 40)
-  //           }
-  //       });
-  //       let post_name = document.getElementById('post_name');
-  //       post_name.setAttribute("value", inputAddress);
-  //       let hidden_address = document.getElementById('hidden_address');
-  //       hidden_address.setAttribute("value", inputAddress);
-  //     } else {
-  //       alert('Geocode was not successful for the following reason: ' + status);
-  //     }
-  //   });
-  // }
-
-  // function searchAddress(){
-  //   let inputSearchAddress = document.getElementById('search').value;
-
-  //   geocoder.geocode( { 'address': inputSearchAddress }, function(results, status) {
-  //     if (status == 'OK') {
-  //       map.setCenter(results[0].geometry.location);
-  //     } else {
-  //       alert('Geocode was not successful for the following reason: ' + status);
-  //     }
-  //   });
-  // }
+    geocoder.geocode( { 'address': inputSearchAddress }, function(results, status) {
+      if (status == 'OK') {
+        map.setCenter(results[0].geometry.location);
+      } else {
+        alert('Geocode was not successful for the following reason: ' + status);
+      }
+    });
+  }
 
   function currentLocation(){
     navigator.geolocation.getCurrentPosition(function(position) {
