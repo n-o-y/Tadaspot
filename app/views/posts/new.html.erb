@@ -63,7 +63,6 @@
   }
 
   function getClickLatLng(lat_lng, map) {
-    // let clickMarker;
     document.getElementById('getlat').textContent = lat_lng.lat();
     document.getElementById('getlng').textContent = lat_lng.lng();
     console.log(clickMarker != null);
@@ -71,45 +70,15 @@
       clickMarker.setMap(null);
     }
     clickMarker = null;
-    // console.log(clickMarker != null);
     clickMarker = new google.maps.Marker({
       position: lat_lng,
       map: map
     });
-    // console.log(clickMarker != null);
-    // if (clickMarker != null){
-    //   clickMarker.setMap(null);
-    // }
-    // clickMarker = null;
     let postLat = document.getElementById('postLat')
     postLat.value = lat_lng.lat();
     let postLng = document.getElementById('postLng')
     postLng.value = lat_lng.lng();
   }
-
-  // function codeAddress(){
-  //   let inputAddress = document.getElementById('address').value;
-
-  //   geocoder.geocode( { 'address': inputAddress}, function(results, status) {
-  //     if (status == 'OK') {
-  //       map.setCenter(results[0].geometry.location);
-  //       if(marker != null){
-  //         marker.setMap(null);
-  //       }
-  //       marker = null;
-  //       marker = new google.maps.Marker({
-  //           map: map,
-  //           position: results[0].geometry.location
-  //       });
-  //       let post_name = document.getElementById('post_name');
-  //       post_name.setAttribute("value", inputAddress);
-  //       let hidden_address = document.getElementById('hidden_address');
-  //       hidden_address.setAttribute("value", inputAddress);
-  //     } else {
-  //       alert('Geocode was not successful for the following reason: ' + status);
-  //     }
-  //   });
-  // }
 
   function searchAddress(){
     let inputSearchAddress = document.getElementById('search').value;
@@ -135,13 +104,6 @@
         position: LatLng
       });
     });
-
-    // map.addListener('click', function(e) {
-    //   getClickLatLng(e.latLng, map);
-    // });
-    // // let hidden_address = document.getElementById('hidden_address');
-    // hidden_address.setAttribute("value", inputAddress);
-    // console.log(hidden_address['value']);
   }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV["GOOGLE_MAP_KEY"]%>&callback=initMap" async defer></script>
