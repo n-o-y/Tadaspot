@@ -42,81 +42,27 @@
   let marker
 
   function initMap(){
-    geocoder = new google.maps.Geocoder()
+    geocoder = new google.maps.Geocoder();
     post_LatLng = new google.maps.LatLng(
         <%= @post.latitude %>,
         <%= @post.longitude %>
-        );
+    );
     map = new google.maps.Map(document.getElementById('map'),{
         center: post_LatLng,
         zoom: 14
-      });
-    // map = new google.maps.Map(document.getElementById('map'), {
-    //   center: {
-    //     lat: 35.681,
-    //     lng: 139.767
-    //   },
-    //   zoom: 14
-    // });
-
-    // navigator.geolocation.getCurrentPosition(function(position) {
-      // LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-
-      // marker = new google.maps.Marker({
-      //   map: map,
-      //   position: LatLng
-      // });
-      // console.log(marker);
-      <% @posts.each do |post| %>
-        pos = new google.maps.LatLng(
-          <%= post.latitude %>,
-          <%= post.longitude %>
-          );
-          default_marker = new google.maps.Marker({
-            map: map,
-            position: pos,
-          });
-      <% end %>
-    // });
-
-
-    // < % @posts.each do |post| %>
-    //   pos = new google.maps.LatLng(
-    //     < %= post.latitude %>,
-    //     < %= post.longitude %>
-    //     );
-    //     default_marker = new google.maps.Marker({
-    //       map: map,
-    //       position: pos,
-    //     });
-    // < % end %>
-
-  }
-
-  function codeAddress(){
-    let inputAddress = document.getElementById('address').value;
-
-    geocoder.geocode( { 'address': inputAddress}, function(results, status) {
-      if (status == 'OK') {
-        map.setCenter(results[0].geometry.location);
-        if(marker != null){
-          marker.setMap(null);
-        }
-        marker = null;
-        marker = new google.maps.Marker({
-            map: map,
-            position: results[0].geometry.location
-        });
-        let post_name = document.getElementById('post_name');
-        post_name.setAttribute("value", inputAddress);
-        let hidden_address = document.getElementById('hidden_address');
-        hidden_address.setAttribute("value", inputAddress);
-      } else {
-        alert('Geocode was not successful for the following reason: ' + status);
-      }
     });
-  }
+
+    <% @posts.each do |post| %>
+      pos = new google.maps.LatLng(
+        <%= post.latitude %>,
+        <%= post.longitude %>
+      );
+      default_marker = new google.maps.Marker({
+        map: map,
+        position: pos,
+      });
+    <% end %>
+  };
 
   function searchAddress(){
     let inputSearchAddress = document.getElementById('search').value;
@@ -128,7 +74,7 @@
         alert('Geocode was not successful for the following reason: ' + status);
       }
     });
-}
+  }
 
   function currentLocation(){
     navigator.geolocation.getCurrentPosition(function(position) {
