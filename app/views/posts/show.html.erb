@@ -37,33 +37,49 @@
 </div>
 
 <script>
-  let map
-  let geocoder
-  let marker
+  let map;
+  let geocoder;
+  let marker = [];
+  let infoWindow = [];
 
   function initMap(){
     geocoder = new google.maps.Geocoder();
     post_LatLng = new google.maps.LatLng(
-        <%= @post.latitude %>,
-        <%= @post.longitude %>
+      <%= @post.latitude %>,
+      <%= @post.longitude %>
     );
+
     map = new google.maps.Map(document.getElementById('map'),{
-        center: post_LatLng,
-        zoom: 14
+      center: post_LatLng,
+      zoom: 14
     });
 
-    <% @posts.each do |post| %>
-      pos = new google.maps.LatLng(
-        <%= post.latitude %>,
-        <%= post.longitude %>
-      );
-      default_marker = new google.maps.Marker({
-        map: map,
-        position: pos,
-      });
-    <% end %>
-  };
+    let markerData = gon.posts;
 
+    for (let i = 0; i < markerData.length; i++) {
+      let markerLatLng = {lat: parseFloat( markerData[i]['latitude'] ), lng: parseFloat( markerData[i]['longitude'] )};
+      marker[i] = new google.maps.Marker({
+        map: map,
+        position: markerLatLng
+      });
+
+      const postId = markerData[i]['id'];
+      infoWindow[i] = new google.maps.InfoWindow({
+        content: '<a href="/posts/' + postId + '">' + markerData[i]['name'] + '</a>'
+      });
+
+      markerEvent(i);
+
+    }
+
+    function markerEvent(i) {
+      marker[i].addListener('click', function() {
+        infoWindow[i].open(map, marker[i]);
+      });
+    }
+  };
+</script>
+<script>
   function searchAddress(){
     let inputSearchAddress = document.getElementById('search').value;
 
@@ -75,7 +91,8 @@
       }
     });
   }
-
+</script>
+<script>
   function currentLocation(){
     navigator.geolocation.getCurrentPosition(function(position) {
       LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);

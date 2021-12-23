@@ -5,6 +5,7 @@ class PostsController < ApplicationController
 
   def new
     @post = Post.new
+    gon.posts = Post.all
   end
 
   def create
@@ -20,6 +21,7 @@ class PostsController < ApplicationController
   def show
     @post = Post.find(params[:id])
     @posts =Post.all
+    gon.posts = Post.all
   end
 
   def edit

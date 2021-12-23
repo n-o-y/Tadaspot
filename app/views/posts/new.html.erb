@@ -1,3 +1,4 @@
+<%= include_gon %>
 <div class="container-fluid border">
   <div class="row border">
     <div class="border col-3">
@@ -41,27 +42,53 @@
 </div>
 
 <script>
-  let map
-  let geocoder
-  let marker
-  let clickMarker
+  let map;
+  let geocoder;
+  let marker = [];
+  let infoWindow = [];
+  let clickMarker;
 
   function initMap(){
-    geocoder = new google.maps.Geocoder()
+    geocoder = new google.maps.Geocoder();
 
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: {
-        lat: 35.681,
-        lng: 139.767
-      },
-      zoom: 14
-    });
+    navigator.geolocation.getCurrentPosition(function(position) {
+      LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      map = new google.maps.Map(document.getElementById('map'),{
+        center: LatLng,
+        zoom: 14
+      });
 
-    map.addListener('click', function(e) {
-      getClickLatLng(e.latLng, map);
+      let markerData = gon.posts;
+
+      for (let i = 0; i < markerData.length; i++) {
+        let markerLatLng = {lat: parseFloat( markerData[i]['latitude'] ), lng: parseFloat( markerData[i]['longitude'] )};
+        marker[i] = new google.maps.Marker({
+          map: map,
+          position: markerLatLng
+        });
+
+        const postId = markerData[i]['id'];
+        infoWindow[i] = new google.maps.InfoWindow({
+          content: '<a href="/posts/' + postId + '">' + markerData[i]['name'] + '</a>'
+        });
+
+        markerEvent(i);
+
+      }
+
+      function markerEvent(i) {
+        marker[i].addListener('click', function() {
+          infoWindow[i].open(map, marker[i]);
+        });
+      }
+
+      map.addListener('click', function(e) {
+        getClickLatLng(e.latLng, map);
+      });
     });
   }
-
+</script>
+<script>
   function getClickLatLng(lat_lng, map) {
     document.getElementById('getlat').textContent = lat_lng.lat();
     document.getElementById('getlng').textContent = lat_lng.lng();
@@ -79,7 +106,8 @@
     let postLng = document.getElementById('postLng')
     postLng.value = lat_lng.lng();
   }
-
+</script>
+<script>
   function searchAddress(){
     let inputSearchAddress = document.getElementById('search').value;
 
@@ -91,13 +119,14 @@
       }
     });
   }
-
+</script>
+<script>
   function currentLocation(){
     navigator.geolocation.getCurrentPosition(function(position) {
       LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
       map = new google.maps.Map(document.getElementById('map'),{
         center: LatLng,
-        zoom: 14
+        zoom: 16
       });
       marker = new google.maps.Marker({
         map: map,
