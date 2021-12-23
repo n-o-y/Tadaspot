@@ -19,8 +19,8 @@
         <%= render 'likes/like', post: @post %>
       </div>
       <% if @post.user == current_user %>
-        <%= link_to "投稿を編集する", edit_post_path(@post) %>
-        <%= link_to "投稿を削除する", post_path(@post), method: :delete %>
+        <%= link_to "投稿を編集する", edit_post_path(@post), class:"btn btn-info" %>
+        <%= link_to "投稿を削除する", post_path(@post), method: :delete, class:"btn btn-danger" %>
       <% end %>
     </div>
    <script>

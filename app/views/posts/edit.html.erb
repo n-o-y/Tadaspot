@@ -36,46 +36,30 @@
 </div>
 
 <script>
-  let map
-  let geocoder
-  let marker
+  let map;
+  let geocoder;
+  let marker;
 
   function initMap(){
-    geocoder = new google.maps.Geocoder()
+    geocoder = new google.maps.Geocoder();
+    post_LatLng = new google.maps.LatLng(
+      <%= @post.latitude %>,
+      <%= @post.longitude %>
+    );
 
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: {
-        lat: 35.681,
-        lng: 139.767
-      },
+    map = new google.maps.Map(document.getElementById('map'),{
+      center: post_LatLng,
       zoom: 14
     });
-  }
 
-  function codeAddress(){
-    let inputAddress = document.getElementById('address').value;
+    marker = new google.maps.Marker({
+      map: map,
+      position: post_LatLng
+    })
 
-    geocoder.geocode( { 'address': inputAddress}, function(results, status) {
-      if (status == 'OK') {
-        map.setCenter(results[0].geometry.location);
-        if(marker != null){
-          marker.setMap(null);
-        }
-        marker = null;
-        marker = new google.maps.Marker({
-            map: map,
-            position: results[0].geometry.location
-        });
-        let post_name = document.getElementById('post_name');
-        post_name.setAttribute("value", inputAddress);
-        let hidden_address = document.getElementById('hidden_address');
-        hidden_address.setAttribute("value", inputAddress);
-      } else {
-        alert('Geocode was not successful for the following reason: ' + status);
-      }
-    });
-  }
-
+  };
+</script>
+<script>
   function searchAddress(){
     let inputSearchAddress = document.getElementById('search').value;
 
@@ -86,8 +70,9 @@
         alert('Geocode was not successful for the following reason: ' + status);
       }
     });
-}
-
+  }
+</script>
+<script>
   function currentLocation(){
     navigator.geolocation.getCurrentPosition(function(position) {
       LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
