@@ -1,7 +1,7 @@
-<div class="row my-3 post-list">
+<div class="row my-3 post-list justify-content-center">
   <% @posts.each do |post| %>
 
-  <div class="col col-2 d-flex flex-column border shadow mx-1">
+  <div class="col col-2 d-flex flex-column border shadow mx-2">
   <%= link_to post_path(post.id), style:"text-decoration: none; color: black;" do %>
     <div>
       <%= attachment_image_tag post, :image, size: "150x100", style:"object-fit: contain;", fallback: "no_image.png" %>
@@ -23,9 +23,9 @@
 
   </div>
   <% end %>
-    <%= paginate @posts, remote: true %>
+    <!--<　%= paginate @posts, remote: true %>-->
 </div>
-
+<%= paginate @posts, remote: true %>
 <script>
   $('.post-star').raty({
     readOnly: true,
@@ -34,13 +34,4 @@
     },
     path: '/assets'
   });
-</script>
-
-<script>
-   $(function() {
-     $('.jscroll').jscroll({
-       contentSelector: '.post-list',
-       nextSelector: 'span.next: last a'
-     });
-   });
 </script>
