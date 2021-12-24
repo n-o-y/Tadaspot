@@ -6,7 +6,7 @@
   <div class="row">
     <h3>投稿一覧</h3>
   </div>
-  <div id="pagenate">
+  <div id="pagenate_post">
     <div class="row my-3 post-list">
       <% @posts.each do |post| %>
         <div class="col col-2 d-flex flex-column border shadow mx-1">
@@ -30,13 +30,23 @@
           <% end %>
         </div>
       <% end %>
-      <%= paginate @posts, remote: true %>
+      <%= paginate @posts, :param_name => 'post_page', remote: true %>
+      <!--< %= paginate @posts, remote: true %>-->
     </div>
+    <script>
+      $('.post-star').raty({
+        readOnly: true,
+        score: function(){
+          return $(this).attr('data-score');
+        },
+        path: '/assets'
+      });
+    </script>
   </div>
   <div class="row mt-5">
     <h3>いいね一覧</h3>
   </div>
-  <div id="pagenate">
+  <div id="pagenate_like">
     <div class="row my-3 post-list">
       <% @post_like.each do |post| %>
         <div class="col col-2 d-flex flex-column border shadow mx-1">
@@ -47,7 +57,7 @@
             <div>
               <%= post.name %>
             </div>
-            <div class="post-star" data-score="<%= post.star %>"></div>
+            <div class="like-star" data-score="<%= post.star %>"></div>
             <div>
               <%= post.introduction %>
             </div>
@@ -60,16 +70,17 @@
           <% end %>
         </div>
       <% end %>
-      <%= paginate @posts, remote: true %>
+      <%= paginate @post_like, :param_name => 'like_page', remote: true %>
+      <!--< %= paginate @post_like, remote: true %>-->
     </div>
+    <script>
+      $('.like-star').raty({
+        readOnly: true,
+        score: function(){
+          return $(this).attr('data-score');
+        },
+        path: '/assets'
+      });
+    </script>
   </div>
 </div>
-<script>
-  $('.post-star').raty({
-    readOnly: true,
-    score: function(){
-      return $(this).attr('data-score');
-    },
-    path: '/assets'
-  });
-</script>
