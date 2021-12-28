@@ -2,8 +2,14 @@
 
 require 'rails_helper'
 
-describe 'Postモデルのテスト' do
-  it "有効な投稿内容の場合は保存されるのか" do
-    except(FactoryBot.build(:post)).to be_valid
+describe 'test' do
+  it 'ユーザ新規登録' do
+    expect(FactoryBot.build(:user)).to be_valid
+  end
+end
+describe 'test2' do
+  it '新規投稿' do
+    user = FactoryBot.create(:user)
+    expect(FactoryBot.build(:post)).to be_valid
   end
 end
