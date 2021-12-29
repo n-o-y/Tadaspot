@@ -1,0 +1,19 @@
+<div class="container">
+  <div class="row mx-auto my-4 justify-content-center align-items-center">
+    <%= image_tag 'logo.png', size: '175x70'%>
+    <h2 class="ml-2">退会確認</h2>
+  </div>
+  <div class="row mx-auto mb-5">
+    <div class="col-6 mx-auto py-4 border shadow">
+      <div class="row">
+        <p class="col text-center">
+          本当に退会しますか？
+        </p>
+      </div>
+      <div class="row justify-content-center">
+        <%= link_to "退会する", withdraw_users_path, method: :patch, "data-confirm" => "本当に退会しますか?", class:"col-3 btn btn-danger" %>
+        <%= link_to "退会しない", users_path, class:"col-3 btn btn-primary ml-2"%>
+      </div>
+    </div>
+  </div>
+</div>

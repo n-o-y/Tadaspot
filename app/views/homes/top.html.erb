@@ -1,0 +1,115 @@
+<%= include_gon %>
+<%= javascript_include_tag "application" %>
+
+<div id='map', style="height: 400px;, width: 600px;"></div>
+<script>
+  let map;
+  let geocoder;
+  let marker = [];
+  let infoWindow = [];
+
+  function initMap(){
+    geocoder = new google.maps.Geocoder();
+
+    navigator.geolocation.getCurrentPosition(function(position) {
+      LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      map = new google.maps.Map(document.getElementById('map'),{
+        center: LatLng,
+        zoom: 14
+      });
+
+      let markerData = gon.posts;
+
+      for (let i = 0; i < markerData.length; i++) {
+        let markerLatLng = {lat: parseFloat( markerData[i]['latitude'] ), lng: parseFloat( markerData[i]['longitude'] )};
+        marker[i] = new google.maps.Marker({
+          map: map,
+          position: markerLatLng
+        });
+
+        const postId = markerData[i]['id'];
+        infoWindow[i] = new google.maps.InfoWindow({
+          content: '<a href="/posts/' + postId + '">' + markerData[i]['name'] + '</a>'
+        });
+
+        markerEvent(i);
+
+      }
+
+      function markerEvent(i) {
+        marker[i].addListener('click', function() {
+          infoWindow[i].open(map, marker[i]);
+        });
+      }
+    });
+  }
+</script>
+<script>
+  function searchAddress(){
+    let inputSearchAddress = document.getElementById('search').value;
+    // let geocoder;
+    // let map;
+    geocoder.geocode( { 'address': inputSearchAddress }, function(results, status) {
+      if (status == 'OK') {
+        map.setCenter(results[0].geometry.location);
+      } else {
+        alert('Geocode was not successful for the following reason: ' + status);
+      }
+    });
+  }
+</script>
+<script>
+  function currentLocation(){
+    navigator.geolocation.getCurrentPosition(function(position) {
+      LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      map = new google.maps.Map(document.getElementById('map'),{
+        center: LatLng,
+        zoom: 16
+      });
+      marker = new google.maps.Marker({
+        map: map,
+        position: LatLng
+      });
+    });
+  }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV["GOOGLE_MAP_KEY"]%>&callback=initMap" async defer></script>
+
+<div id="pagenate">
+  <div class="row my-3 post-list justify-content-center">
+    <% @posts.each do |post| %>
+      <div class="col col-2 d-flex flex-column border shadow mx-2">
+        <%= link_to post_path(post.id), style:"text-decoration: none; color: black;" do %>
+          <div>
+            <%= attachment_image_tag post, :image, size: "150x100", style:"object-fit: contain;", fallback: "no_image.png" %>
+          </div>
+          <div>
+            <%= post.name %>
+          </div>
+          <div class="post-star" data-score="<%= post.star %>"></div>
+          <div>
+            <%= post.introduction %>
+          </div>
+          <div>
+            <%= post.user.name %>
+          </div>
+          <div id="like_buttons_<%=post.id%>">
+            <%= render 'likes/like', post: post %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+    <!--<　%= paginate @posts, remote: true %>-->
+  </div>
+  <%= paginate @posts, remote: true %>
+</div>
+
+<script>
+  $('.post-star').raty({
+    readOnly: true,
+    score: function(){
+      return $(this).attr('data-score');
+    },
+    path: '/assets'
+  });
+</script>

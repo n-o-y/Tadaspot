@@ -1,0 +1,142 @@
+<%= include_gon %>
+<div class="container-fluid border">
+  <div class="row border">
+    <div class="border col-3">
+      <%= form_with model:@post, local:true do |f| %>
+      <input type="hidden" name="map[address]" id="hidden_address">
+      <div class="row my-2" style="width: 300px; height: 200px;">
+        <%= f.attachment_field :image %>
+      </div>
+      <div class="row my-2">
+        <%= f.text_field :name, placeholder:"スポット名を入力" %>
+      </div>
+      <div class="row my-2" id="rating-form">
+        <%= f.label :star, "評価" %>
+        <%= f.hidden_field :star, :value => 'score' %>
+      </div>
+      <div class="row my-2">
+        <%= f.text_area :introduction, placeholder:"コメントを入力" %>
+      </div>
+      <ul style="display: none;">
+        <li id="getlat"></li>
+        <li id="getlng"></li>
+      </ul>
+      <%= f.hidden_field :latitude, id:"postLat" %>
+      <%= f.hidden_field :longitude, id:"postLng" %>
+      <%= f.hidden_field :user_id, value: current_user.id %>
+      <div class="row my-2">
+        <%= f.submit "投稿する", class:"btn btn-success" %>
+      </div>
+      <% end %>
+    </div>
+    <script>
+      $('#rating-form').raty({
+        starOn: "<%= asset_path('star-on.png') %>",
+        starOff: "<%= asset_path('star-off.png') %>",
+        starHalf: "<%= asset_path('star-half.png') %>",
+        scoreName: 'post[star]'
+      });
+    </script>
+    <div class="col-9" id='map'></div>
+  </div>
+</div>
+
+<script>
+  let map;
+  let geocoder;
+  let marker = [];
+  let infoWindow = [];
+  let clickMarker;
+
+  function initMap(){
+    geocoder = new google.maps.Geocoder();
+
+    navigator.geolocation.getCurrentPosition(function(position) {
+      LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      map = new google.maps.Map(document.getElementById('map'),{
+        center: LatLng,
+        zoom: 14
+      });
+
+      let markerData = gon.posts;
+
+      for (let i = 0; i < markerData.length; i++) {
+        let markerLatLng = {lat: parseFloat( markerData[i]['latitude'] ), lng: parseFloat( markerData[i]['longitude'] )};
+        marker[i] = new google.maps.Marker({
+          map: map,
+          position: markerLatLng
+        });
+
+        const postId = markerData[i]['id'];
+        infoWindow[i] = new google.maps.InfoWindow({
+          content: '<a href="/posts/' + postId + '">' + markerData[i]['name'] + '</a>'
+        });
+
+        markerEvent(i);
+
+      }
+
+      function markerEvent(i) {
+        marker[i].addListener('click', function() {
+          infoWindow[i].open(map, marker[i]);
+        });
+      }
+
+      map.addListener('click', function(e) {
+        getClickLatLng(e.latLng, map);
+      });
+    });
+  }
+</script>
+<script>
+  function getClickLatLng(lat_lng, map) {
+    document.getElementById('getlat').textContent = lat_lng.lat();
+    document.getElementById('getlng').textContent = lat_lng.lng();
+    console.log(clickMarker != null);
+    if (clickMarker != null){
+      clickMarker.setMap(null);
+    }
+    clickMarker = null;
+    clickMarker = new google.maps.Marker({
+      position: lat_lng,
+      map: map,
+      icon: {
+        url: "http://maps.google.com/mapfiles/ms/micons/yellow.png",
+        scaledSize: new google.maps.Size(40, 40)
+      }
+    });
+    let postLat = document.getElementById('postLat')
+    postLat.value = lat_lng.lat();
+    let postLng = document.getElementById('postLng')
+    postLng.value = lat_lng.lng();
+  }
+</script>
+<script>
+  function searchAddress(){
+    let inputSearchAddress = document.getElementById('search').value;
+
+    geocoder.geocode( { 'address': inputSearchAddress }, function(results, status) {
+      if (status == 'OK') {
+        map.setCenter(results[0].geometry.location);
+      } else {
+        alert('Geocode was not successful for the following reason: ' + status);
+      }
+    });
+  }
+</script>
+<script>
+  function currentLocation(){
+    navigator.geolocation.getCurrentPosition(function(position) {
+      LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      map = new google.maps.Map(document.getElementById('map'),{
+        center: LatLng,
+        zoom: 16
+      });
+      marker = new google.maps.Marker({
+        map: map,
+        position: LatLng
+      });
+    });
+  }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV["GOOGLE_MAP_KEY"]%>&callback=initMap" async defer></script>

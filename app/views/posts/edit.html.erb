@@ -1,0 +1,90 @@
+<div class="container-fluid border">
+  <div class="row border">
+    <div class="border col-3">
+      <%= form_with model:@post, local:true do |f| %>
+      <input type="hidden" name="map[address]" id="hidden_address">
+      <div class="row my-2" style="width: 300px; height: 200px;">
+        <%= attachment_image_tag @post, :image, size:"300x200" %>
+        <%= f.attachment_field :image %>
+      </div>
+      <div class="row my-2">
+        <%= f.text_field :name, placeholder:"スポット名を入力" %>
+      </div>
+      <div class="row my-2" id="rating-form">
+        <%= f.label :star, "評価" %>
+        <%= f.hidden_field :star, :value => 'score' %>
+      </div>
+      <div class="row my-2">
+        <%= f.text_area :introduction, placeholder:"コメントを入力" %>
+      </div>
+      <%= f.hidden_field :user_id, value: current_user.id %>
+      <div class="row my-2">
+        <%= f.submit "投稿を更新する", class:"btn btn-success" %>
+      </div>
+      <% end %>
+    </div>
+    <script>
+      $('#rating-form').raty({
+        starOn: "<%= asset_path('star-on.png') %>",
+        starOff: "<%= asset_path('star-off.png') %>",
+        starHalf: "<%= asset_path('star-half.png') %>",
+        scoreName: 'post[star]'
+      });
+    </script>
+    <div class="col-9" id='map'></div>
+  </div>
+</div>
+
+<script>
+  let map;
+  let geocoder;
+  let marker;
+
+  function initMap(){
+    geocoder = new google.maps.Geocoder();
+    post_LatLng = new google.maps.LatLng(
+      <%= @post.latitude %>,
+      <%= @post.longitude %>
+    );
+
+    map = new google.maps.Map(document.getElementById('map'),{
+      center: post_LatLng,
+      zoom: 14
+    });
+
+    marker = new google.maps.Marker({
+      map: map,
+      position: post_LatLng
+    })
+
+  };
+</script>
+<script>
+  function searchAddress(){
+    let inputSearchAddress = document.getElementById('search').value;
+
+    geocoder.geocode( { 'address': inputSearchAddress }, function(results, status) {
+      if (status == 'OK') {
+        map.setCenter(results[0].geometry.location);
+      } else {
+        alert('Geocode was not successful for the following reason: ' + status);
+      }
+    });
+  }
+</script>
+<script>
+  function currentLocation(){
+    navigator.geolocation.getCurrentPosition(function(position) {
+      LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      map = new google.maps.Map(document.getElementById('map'),{
+        center: LatLng,
+        zoom: 14
+      });
+      marker = new google.maps.Marker({
+        map: map,
+        position: LatLng
+      });
+    });
+  }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV["GOOGLE_MAP_KEY"]%>&callback=initMap" async defer></script>
