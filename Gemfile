@@ -85,3 +85,7 @@ gem 'font-awesome-sass', '~> 5.13'
 gem 'kaminari'
 
 gem 'js_rails_routes', group: :development
+
+group :production do
+  gem 'mysql2'
+end
