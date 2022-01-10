@@ -1,43 +1,43 @@
 <div class="container-fluid border">
   <div class="row border">
-    <div class="border col-3">
-      <div class="row my-2 justify-content-center">
-        <%= attachment_image_tag @post, :image, style:"object-fit: contain;", style:"width: 300px; height: 200px;", fallback: asset_path("no_image.png") %>
+    <div class="col col-md-9 order-md-1" id='map' style="min-height: 500px;"></div>
+    <div class="border col col-md-3 order-md-0 card">
+      <%= attachment_image_tag @post, :image, fallback: asset_path("no_image.png"), class:"card-img-top" %>
+      <div class="card-body">
+        <h5 class="card-title">
+          <%= @post.name %>
+        </h5>
+        <div class="post-star mb-2" data-score="<%= @post.star %>"></div>
+        <p class="card-text">
+          <%= @post.introduction %>
+        </p>
+        <h6 class="card-subtitle text-muted">
+          <%= l @post.created_at %>
+          <%= @post.user.name %>さんが投稿
+        </h6>
+        <div id="like_buttons_<%=@post.id%>">
+          <%= render 'likes/like', post: @post %>
+        </div>
+        <% if @post.user == current_user %>
+          <%= link_to "編集する", edit_post_path(@post), class:"card-link" %>
+          <%= link_to "削除する", post_path(@post), method: :delete, data: {confirm: "投稿を削除しますか？"}, class:"card-link" %>
+        <% end %>
       </div>
-      <div class="row m-2">
-        <%= @post.name %>
-      </div>
-      <div class=" row m-2 post-star" data-score="<%= @post.star %>"></div>
-      <div class="row m-2">
-        <%= @post.introduction %>
-      </div>
-      <div class="row m-2">
-        <%= l @post.created_at %>
-        <%= @post.user.name %>さんが投稿
-      </div>
-      <div class="row m-2" id="like_buttons_<%=@post.id%>">
-        <%= render 'likes/like', post: @post %>
-      </div>
-      <% if @post.user == current_user %>
-        <%= link_to "投稿を編集する", edit_post_path(@post), class:"btn btn-info" %>
-        <%= link_to "投稿を削除する", post_path(@post), method: :delete, class:"btn btn-danger ml-2" %>
-      <% end %>
     </div>
-   <script>
-  $('.post-star').raty({
-    readOnly: true,
-    score: function(){
-      return $(this).attr('data-score');
-    },
-    starOn: "<%= asset_path('star-on.png') %>",
-    starOff: "<%= asset_path('star-off.png') %>",
-    starHalf: "<%= asset_path('star-half.png') %>"
-  });
-</script>
-    <div class="col-9" id='map'></div>
+      <script>
+        $('.post-star').raty({
+          readOnly: true,
+          score: function(){
+            return $(this).attr('data-score');
+          },
+          starOn: "<%= asset_path('star-on.png') %>",
+          starOff: "<%= asset_path('star-off.png') %>",
+          starHalf: "<%= asset_path('star-half.png') %>"
+        });
+      </script>
+    </div>
   </div>
 </div>
-
 <script>
   let map;
   let geocoder;
