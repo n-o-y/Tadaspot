@@ -1,7 +1,40 @@
 <%= include_gon %>
 <!--< %= javascript_include_tag "application" %>-->
+<div class="container-fulid">
+  <div class="row">
+    <div class="col-md-9 order-md-1" id='map' style="height: 500px;"></div>
+    <div id="pagenate" class="col-md-3 order-md-0">
+      <div class="post-list">
+      <% @posts.each do |post| %>
+        <div class="card border shadow my-1">
+          <%= link_to post_path(post.id), style:"text-decoration: none; color: black;" do %>
+            <%= attachment_image_tag post, :image, fallback: asset_path("no_image.png"), class:"card-img-top" %>
+            <div class="card-body">
+              <h6 class="card-title">
+                <%= post.name %>
+              </h6>
+              <div class="post-star" data-score="<%= post.star %>"></div>
+              <p class="card-text">
+                <%= post.introduction %>
+              </p>
+              <h7 class="card-subtitle text-muted">
+                <%= l post.created_at %>
+                <%= post.user.name %>さんが投稿
+              </h7>
+              <div id="like_buttons_<%=post.id%>">
+                <%= render 'likes/like', post: post %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+      <%= paginate @posts, remote: true %>
+      </div>
+    </div>
+  </div>
+</div>
 
-<div id='map', style="height: 400px;, width: 600px;"></div>
+
 <script>
   let map;
   let geocoder;
@@ -74,63 +107,6 @@
   }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV["GOOGLE_MAP_KEY"]%>&callback=initMap" async defer></script>
-
-<div id="pagenate">
-  <div class="row my-3 post-list justify-content-center">
-    <% @posts.each do |post| %>
-      <div class="col col-lg-2 d-flex flex-column border shadow mx-2">
-        <%= link_to post_path(post.id), style:"text-decoration: none; color: black;" do %>
-          <div>
-            <%= attachment_image_tag post, :image, size: "150x100", style:"object-fit: contain;", fallback: asset_path("no_image.png") %>
-          </div>
-          <div>
-            <%= post.name %>
-          </div>
-          <div class="post-star" data-score="<%= post.star %>"></div>
-          <div>
-            <%= post.introduction %>
-          </div>
-          <div>
-            <%= post.user.name %>
-          </div>
-          <div id="like_buttons_<%=post.id%>">
-            <%= render 'likes/like', post: post %>
-          </div>
-        <% end %>
-      </div>
-    <% end %>
-  </div>
-  <%= paginate @posts, remote: true %>
-</div>
-
-<div id="pagenate">
-  <div class="row my-3 post-list justify-content-center">
-    <% @posts.each do |post| %>
-      <div class="col-xl-4 col-lg-3 col-md-6 card border shadow">
-        <%= link_to post_path(post.id), style:"text-decoration: none; color: black;" do %>
-            <%= attachment_image_tag post, :image, fallback: asset_path("no_image.png"), class:"card-img-top" %>
-            <div class="card-body">
-              <h6 class="card-title">
-                <%= post.name %>
-              </h6>
-              <div class="post-star" data-score="<%= post.star %>"></div>
-              <p class="card-text">
-                <%= post.introduction %>
-              </p>
-              <h7 class="card-subtitle text-muted">
-                <%= l post.created_at %>
-                <%= post.user.name %>さんが投稿
-              </h7>
-              <div id="like_buttons_<%=post.id%>">
-                <%= render 'likes/like', post: post %>
-              </div>
-            </div>
-        <% end %>
-      </div>
-    <% end %>
-  </div>
-  <%= paginate @posts, remote: true %>
-</div>
 
 <script>
   $('.post-star').raty({
