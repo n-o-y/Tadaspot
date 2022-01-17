@@ -23,6 +23,7 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
     @posts =Post.all
     gon.posts = Post.all
+    gon.post = Post.find(params[:id])
   end
 
   def edit

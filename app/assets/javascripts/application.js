@@ -21,5 +21,5 @@
 //= require gmaps/google
 
 //= require jquery
-//= require_tree .
+//= require jquery.raty.js
 //= require rails-ujs
