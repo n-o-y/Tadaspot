@@ -1,4 +1,11 @@
+<script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV["GOOGLE_MAP_KEY"]%>&callback=initNewPostMap" async defer></script>
 <%= include_gon %>
+<%= javascript_include_tag 'initNewPostMap.js' %>
+<%= javascript_include_tag 'searchAddress.js' %>
+<%= javascript_include_tag 'currentLocation.js' %>
+<%= javascript_include_tag 'getClickLatLng.js' %>
+
+
 <div class="container-fluid border">
   <div class="row border">
     <div class="border col-3">
@@ -40,103 +47,3 @@
     <div class="col-9" id='map'></div>
   </div>
 </div>
-
-<script>
-  let map;
-  let geocoder;
-  let marker = [];
-  let infoWindow = [];
-  let clickMarker;
-
-  function initMap(){
-    geocoder = new google.maps.Geocoder();
-
-    navigator.geolocation.getCurrentPosition(function(position) {
-      LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-      map = new google.maps.Map(document.getElementById('map'),{
-        center: LatLng,
-        zoom: 14
-      });
-
-      let markerData = gon.posts;
-
-      for (let i = 0; i < markerData.length; i++) {
-        let markerLatLng = {lat: parseFloat( markerData[i]['latitude'] ), lng: parseFloat( markerData[i]['longitude'] )};
-        marker[i] = new google.maps.Marker({
-          map: map,
-          position: markerLatLng
-        });
-
-        const postId = markerData[i]['id'];
-        infoWindow[i] = new google.maps.InfoWindow({
-          content: '<a href="/posts/' + postId + '">' + markerData[i]['name'] + '</a>'
-        });
-
-        markerEvent(i);
-
-      }
-
-      function markerEvent(i) {
-        marker[i].addListener('click', function() {
-          infoWindow[i].open(map, marker[i]);
-        });
-      }
-
-      map.addListener('click', function(e) {
-        getClickLatLng(e.latLng, map);
-      });
-    });
-  }
-</script>
-<script>
-  function getClickLatLng(lat_lng, map) {
-    document.getElementById('getlat').textContent = lat_lng.lat();
-    document.getElementById('getlng').textContent = lat_lng.lng();
-    console.log(clickMarker != null);
-    if (clickMarker != null){
-      clickMarker.setMap(null);
-    }
-    clickMarker = null;
-    clickMarker = new google.maps.Marker({
-      position: lat_lng,
-      map: map,
-      icon: {
-        url: "http://maps.google.com/mapfiles/ms/micons/yellow.png",
-        scaledSize: new google.maps.Size(40, 40)
-      }
-    });
-    let postLat = document.getElementById('postLat')
-    postLat.value = lat_lng.lat();
-    let postLng = document.getElementById('postLng')
-    postLng.value = lat_lng.lng();
-  }
-</script>
-<script>
-  function searchAddress(){
-    let inputSearchAddress = document.getElementById('search').value;
-
-    geocoder.geocode( { 'address': inputSearchAddress }, function(results, status) {
-      if (status == 'OK') {
-        map.setCenter(results[0].geometry.location);
-      } else {
-        alert('Geocode was not successful for the following reason: ' + status);
-      }
-    });
-  }
-</script>
-<script>
-  function currentLocation(){
-    navigator.geolocation.getCurrentPosition(function(position) {
-      LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-      map = new google.maps.Map(document.getElementById('map'),{
-        center: LatLng,
-        zoom: 16
-      });
-      marker = new google.maps.Marker({
-        map: map,
-        position: LatLng
-      });
-    });
-  }
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV["GOOGLE_MAP_KEY"]%>&callback=initMap" async defer></script>
