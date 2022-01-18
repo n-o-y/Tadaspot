@@ -1,3 +1,9 @@
+<script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV["GOOGLE_MAP_KEY"]%>&callback=initEditPostMap" async defer></script>
+<%= include_gon %>
+<%= javascript_include_tag 'initEditPostMap.js' %>
+<%= javascript_include_tag 'searchAddress.js' %>
+<%= javascript_include_tag 'currentLocation.js' %>
+
 <div class="container-fluid border">
   <div class="row border">
     <div class="border col-3">
@@ -34,57 +40,3 @@
     <div class="col-9" id='map'></div>
   </div>
 </div>
-
-<script>
-  let map;
-  let geocoder;
-  let marker;
-
-  function initMap(){
-    geocoder = new google.maps.Geocoder();
-    post_LatLng = new google.maps.LatLng(
-      <%= @post.latitude %>,
-      <%= @post.longitude %>
-    );
-
-    map = new google.maps.Map(document.getElementById('map'),{
-      center: post_LatLng,
-      zoom: 14
-    });
-
-    marker = new google.maps.Marker({
-      map: map,
-      position: post_LatLng
-    })
-
-  };
-</script>
-<script>
-  function searchAddress(){
-    let inputSearchAddress = document.getElementById('search').value;
-
-    geocoder.geocode( { 'address': inputSearchAddress }, function(results, status) {
-      if (status == 'OK') {
-        map.setCenter(results[0].geometry.location);
-      } else {
-        alert('Geocode was not successful for the following reason: ' + status);
-      }
-    });
-  }
-</script>
-<script>
-  function currentLocation(){
-    navigator.geolocation.getCurrentPosition(function(position) {
-      LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-      map = new google.maps.Map(document.getElementById('map'),{
-        center: LatLng,
-        zoom: 14
-      });
-      marker = new google.maps.Marker({
-        map: map,
-        position: LatLng
-      });
-    });
-  }
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV["GOOGLE_MAP_KEY"]%>&callback=initMap" async defer></script>
