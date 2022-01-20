@@ -33,51 +33,8 @@
           </div>
         <% end %>
       </div>
-      <%= paginate @posts, remote: true %>
+      <%= paginate @posts %>
     </div>
   </div>
 </div>
-
-
-<!--
-
-<!--<div id="pagenate">-->
-<!--  <div class="row my-3 post-list justify-content-center flex-nowrap" style="overflow: scroll;">-->
-<!--    < % @posts.each do |post| %>-->
-<!--      <div class="col-xl-4 col-lg-3 col-md-6 card border shadow">-->
-<!--        < %= link_to post_path(post.id), style:"text-decoration: none; color: black;" do %>-->
-<!--            < %= attachment_image_tag post, :image, fallback: asset_path("no_image.png"), class:"card-img-top" %>-->
-<!--            <div class="card-body">-->
-<!--              <h6 class="card-title">-->
-<!--                < %= post.name %>-->
-<!--              </h6>-->
-<!--              <div class="post-star" data-score="< %= post.star %>"></div>-->
-<!--              <p class="card-text">-->
-<!--                < %= post.introduction %>-->
-<!--              </p>-->
-<!--              <h7 class="card-subtitle text-muted">-->
-<!--                < %= l post.created_at %>-->
-<!--                < %= post.user.name %>さんが投稿-->
-<!--              </h7>-->
-<!--              <div id="like_buttons_< %=post.id%>">-->
-<!--                < %= render 'likes/like', post: post %>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--        < % end %>-->
-<!--      </div>-->
-<!--    < % end %>-->
-<!--  </div>-->
-<!--  < %= paginate @posts, remote: true %>-->
-<!--</div>-->
-
-<script>
-  $('.post-star').raty({
-    readOnly: true,
-    score: function(){
-      return $(this).attr('data-score');
-    },
-    starOn: "<%= asset_path('star-on.png') %>",
-    starOff: "<%= asset_path('star-off.png') %>",
-    starHalf: "<%= asset_path('star-half.png') %>"
-  });
-</script>
+<%= javascript_include_tag 'review.js' %>

@@ -1,10 +1,10 @@
-
-  $('.post-star').raty({
+/*global $*/
+$('.post-star').raty({
     readOnly: true,
     score: function(){
       return $(this).attr('data-score');
     },
-    starOn: "<%= asset_path('star-on.png') %>",
-    starOff: "<%= asset_path('star-off.png') %>",
-    starHalf: "<%= asset_path('star-half.png') %>"
-  });
+    starOn: "/assets/star-on.png",
+    starOff: "/assets/star-off.png",
+    starHalf: "/assets/star-half.png"
+});
