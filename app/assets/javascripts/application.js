@@ -21,6 +21,7 @@
 //= require gmaps/google
 
 //= require jquery
-//  require jquery_ujs
+//= require jquery_ujs
+//= require jquery.jscroll.min.js
 //= require jquery.raty.js
 //= require rails-ujs

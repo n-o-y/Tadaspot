@@ -3,9 +3,9 @@ class HomesController < ApplicationController
     @posts = Post.all.page(params[:page]).per(4)
     @post = Post.new
     gon.posts = Post.all
-    respond_to do |format|
-      format.html
-      format.js
-    end
+    # respond_to do |format|
+    #   format.html
+    #   format.js
+    # end
   end
 end

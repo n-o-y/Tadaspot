@@ -4,11 +4,13 @@
 <%= javascript_include_tag 'searchAddress.js' %>
 <%= javascript_include_tag 'currentLocation.js' %>
 
+
+
 <div class="container-fluid border">
   <div class="row border" style="height: 700px;">
     <div class="col-md-9 order-md-1" id='map' style="height: 700px;"></div>
     <div id="pagenate" class="border col-md-3 order-md-0">
-      <div class="post-list" style="overflow-y: scroll; height: 700px;">
+      <div class="post-list scroll-list jscroll" style="overflow-y: scroll; height: 700px;" >
         <% @posts.each do |post| %>
           <div class="row card border shadow">
             <%= link_to post_path(post.id), style:"text-decoration: none; color: black;" do %>
@@ -32,9 +34,10 @@
             <% end %>
           </div>
         <% end %>
+        <%= paginate @posts %>
       </div>
-      <%= paginate @posts %>
     </div>
   </div>
 </div>
 <%= javascript_include_tag 'review.js' %>
+<%= javascript_include_tag 'scroll.js' %>
