@@ -36,14 +36,8 @@
       </div>
       <% end %>
     </div>
-    <script>
-      $('#rating-form').raty({
-        starOn: "<%= asset_path('star-on.png') %>",
-        starOff: "<%= asset_path('star-off.png') %>",
-        starHalf: "<%= asset_path('star-half.png') %>",
-        scoreName: 'post[star]'
-      });
-    </script>
     <div class="col-9" id='map'></div>
   </div>
 </div>
+
+<%= javascript_include_tag 'ratingForm.js' %>
