@@ -32,18 +32,8 @@
       <% end %>
     </div>
     <%= paginate @posts, :param_name => 'post_page', remote: true %>
-    <script>
-      $('.post-star').raty({
-        readOnly: true,
-        score: function(){
-          return $(this).attr('data-score');
-        },
-        starOn: "<%= asset_path('star-on.png') %>",
-        starOff: "<%= asset_path('star-off.png') %>",
-        starHalf: "<%= asset_path('star-half.png') %>"
-      });
-    </script>
   </div>
+
   <div class="row mt-5">
     <h3>いいね一覧</h3>
   </div>
@@ -73,16 +63,6 @@
       <% end %>
     </div>
     <%= paginate @post_like, :param_name => 'like_page', remote: true %>
-    <script>
-      $('.like-star').raty({
-        readOnly: true,
-        score: function(){
-          return $(this).attr('data-score');
-        },
-        starOn: "<%= asset_path('star-on.png') %>",
-        starOff: "<%= asset_path('star-off.png') %>",
-        starHalf: "<%= asset_path('star-half.png') %>"
-      });
-    </script>
   </div>
 </div>
+<%= javascript_include_tag 'review.js' %>

@@ -30,17 +30,7 @@
         <% end %>
       </div>
     </div>
-      <script>
-        $('.post-star').raty({
-          readOnly: true,
-          score: function(){
-            return $(this).attr('data-score');
-          },
-          starOn: "<%= asset_path('star-on.png') %>",
-          starOff: "<%= asset_path('star-off.png') %>",
-          starHalf: "<%= asset_path('star-half.png') %>"
-        });
-      </script>
-    </div>
   </div>
 </div>
+
+<%= javascript_include_tag 'review.js' %>
