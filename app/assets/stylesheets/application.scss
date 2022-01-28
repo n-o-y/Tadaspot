@@ -17,23 +17,10 @@
 @import 'font-awesome-sprockets';
 @import 'font-awesome';
 
+
 .pagination {
-  display: flex;
-  justify-content: center;
+  display: none;
 }
-.pagination > li > a {
-  border: none;
-  color: #999;
-}
-.pagination > li > a:hover {
-  color: turquoise;
-  background-color: white;
-}
-.pagination > .active > a {
-  color: turquoise;
-  background-color: white;
-}
-.pagination > .active > a:hover {
-  background-color: white;
-  color: turquoise;
+.scroll-list {
+  padding: 0;
 }

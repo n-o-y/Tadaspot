@@ -18,3 +18,4 @@ $('.like-star').raty({
         starOff: "/assets/star-off.png",
         starHalf: "/assets/star-half.png"
 });
+console.log("test");

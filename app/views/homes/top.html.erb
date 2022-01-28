@@ -10,7 +10,7 @@
   <div class="row border" style="height: 700px;">
     <div class="col-md-9 order-md-1" id='map' style="height: 700px;"></div>
     <div id="pagenate" class="border col-md-3 order-md-0">
-      <div class="post-list scroll-list jscroll" style="overflow-y: scroll; height: 700px;" >
+      <div class="post-list scroll-list jscroll" style="overflow: auto; height: 700px;" >
         <% @posts.each do |post| %>
           <div class="row card border shadow">
             <%= link_to post_path(post.id), style:"text-decoration: none; color: black;" do %>
