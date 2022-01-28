@@ -4,9 +4,7 @@ $('.post-star').raty({
     score: function(){
       return $(this).attr('data-score');
     },
-    starOn: "/assets/star-on.png",
-    starOff: "/assets/star-off.png",
-    starHalf: "/assets/star-half.png"
+    path: "/assets/"
 });
 
 $('.like-star').raty({
@@ -14,8 +12,5 @@ $('.like-star').raty({
         score: function(){
           return $(this).attr('data-score');
         },
-        starOn: "/assets/star-on.png",
-        starOff: "/assets/star-off.png",
-        starHalf: "/assets/star-half.png"
+        path: "/assets/"
 });
-console.log("test");
