@@ -1,68 +1,105 @@
-<div class="container">
+
+  <!--<div class="row my-5 justify-content-between">-->
+  <!--  <h2 class="col-5">< %= current_user.name %>さんのマイページ</h2>-->
+  <!--  < %= link_to "登録情報を編集する", edit_user_registration_path, class:"btn btn-info col-2" %>-->
+  <!--</div>-->
+
+
+  <!--</div>-->
+  <!--<div id="pagenate_post">-->
+  <!--  <div class="row my-3 post-list">-->
+  <!--    < % @posts.each do |post| %>-->
+  <!--      <div class="col col-2 d-flex flex-column border shadow mx-2">-->
+  <!--        < %= link_to post_path(post.id), style:"text-decoration: none; color: black;" do %>-->
+  <!--          <div>-->
+  <!--            < %= attachment_image_tag post, :image, size: "150x100", style:"object-fit: contain;", fallback: asset_path("no_image.png") %>-->
+  <!--          </div>-->
+  <!--          <div>-->
+  <!--            < %= post.name %>-->
+  <!--          </div>-->
+  <!--          <div class="post-star" data-score="< %= post.star %>"></div>-->
+  <!--          <div>-->
+  <!--            < %= post.introduction %>-->
+  <!--          </div>-->
+  <!--          <div>-->
+  <!--            < %= post.user.name %>-->
+  <!--          </div>-->
+  <!--          <div id="like_buttons_< %=post.id%>">-->
+  <!--            < %= render 'likes/like', post: post %>-->
+  <!--          </div>-->
+  <!--        < % end %>-->
+  <!--      </div>-->
+  <!--    < % end %>-->
+  <!--  </div>-->
+  <!--  < %= paginate @posts, :param_name => 'post_page', remote: true %>-->
+  <!--</div>-->
+
+
+
+
+<!--  <div id="pagenate_like">-->
+<!--    <div class="row my-3 post-list">-->
+<!--      < % @post_like.each do |post| %>-->
+<!--        <div class="col col-2 d-flex flex-column border shadow mx-2">-->
+<!--          < %= link_to post_path(post.id), style:"text-decoration: none; color: black;" do %>-->
+<!--            <div>-->
+<!--              < %= attachment_image_tag post, :image, size: "150x100", style:"object-fit: contain;", fallback: asset_path("no_image.png") %>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--              < %= post.name %>-->
+<!--            </div>-->
+<!--            <div class="like-star" data-score="< %= post.star %>"></div>-->
+<!--            <div>-->
+<!--              < %= post.introduction %>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--              < %= post.user.name %>-->
+<!--            </div>-->
+<!--            <div id="like_buttons_< %=post.id%>">-->
+<!--              < %= render 'likes/like', post: post %>-->
+<!--            </div>-->
+<!--          < % end %>-->
+<!--        </div>-->
+<!--      < % end %>-->
+<!--    </div>-->
+<!--    < %= paginate @post_like, :param_name => 'like_page', remote: true %>-->
+<!--  </div>-->
+<!--</div>-->
+<!--< %= javascript_include_tag 'review.js' %>-->
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV["GOOGLE_MAP_KEY"]%>&callback=initMap" async defer></script>
+<%= include_gon %>
+<%= javascript_include_tag 'initMap.js' %>
+<%= javascript_include_tag 'searchAddress.js' %>
+<%= javascript_include_tag 'currentLocation.js' %>
+<%= javascript_include_tag 'show.js' %>
+
+<div class="container-fluid border">
   <div class="row my-5 justify-content-between">
     <h2 class="col-5"><%= current_user.name %>さんのマイページ</h2>
     <%= link_to "登録情報を編集する", edit_user_registration_path, class:"btn btn-info col-2" %>
   </div>
-  <div class="row">
-    <h3>投稿一覧</h3>
-  </div>
-  <div id="pagenate_post">
-    <div class="row my-3 post-list">
-      <% @posts.each do |post| %>
-        <div class="col col-2 d-flex flex-column border shadow mx-2">
-          <%= link_to post_path(post.id), style:"text-decoration: none; color: black;" do %>
-            <div>
-              <%= attachment_image_tag post, :image, size: "150x100", style:"object-fit: contain;", fallback: asset_path("no_image.png") %>
-            </div>
-            <div>
-              <%= post.name %>
-            </div>
-            <div class="post-star" data-score="<%= post.star %>"></div>
-            <div>
-              <%= post.introduction %>
-            </div>
-            <div>
-              <%= post.user.name %>
-            </div>
-            <div id="like_buttons_<%=post.id%>">
-              <%= render 'likes/like', post: post %>
-            </div>
-          <% end %>
+  <div class="row border" style="height: 700px;">
+    <div class="col-md-9 order-md-1" id='map' style="height: 700px;"></div>
+    <div id="pagenate" class="border col-md-3 order-md-0">
+      <ul class="tab-list list-unstyled">
+        <li class="tab tab-active">
+          投稿一覧
+        </li>
+        <li class="tab">
+          いいね一覧
+        </li>
+      </ul>
+      <div class="tabbox-contents">
+        <div class="tabbox box-show">
+          <%= render 'users/list', posts: @posts %>
         </div>
-      <% end %>
-    </div>
-    <%= paginate @posts, :param_name => 'post_page', remote: true %>
-  </div>
-
-  <div class="row mt-5">
-    <h3>いいね一覧</h3>
-  </div>
-  <div id="pagenate_like">
-    <div class="row my-3 post-list">
-      <% @post_like.each do |post| %>
-        <div class="col col-2 d-flex flex-column border shadow mx-2">
-          <%= link_to post_path(post.id), style:"text-decoration: none; color: black;" do %>
-            <div>
-              <%= attachment_image_tag post, :image, size: "150x100", style:"object-fit: contain;", fallback: asset_path("no_image.png") %>
-            </div>
-            <div>
-              <%= post.name %>
-            </div>
-            <div class="like-star" data-score="<%= post.star %>"></div>
-            <div>
-              <%= post.introduction %>
-            </div>
-            <div>
-              <%= post.user.name %>
-            </div>
-            <div id="like_buttons_<%=post.id%>">
-              <%= render 'likes/like', post: post %>
-            </div>
-          <% end %>
+        <div class="tabbox">
+          <%= render 'users/list', posts: @post_like %>
         </div>
-      <% end %>
-    </div>
-    <%= paginate @post_like, :param_name => 'like_page', remote: true %>
+      </div>
   </div>
 </div>
+
 <%= javascript_include_tag 'review.js' %>
+<%= javascript_include_tag 'scroll.js' %>

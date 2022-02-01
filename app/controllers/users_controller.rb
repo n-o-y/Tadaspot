@@ -2,10 +2,11 @@ class UsersController < ApplicationController
   def show
     @posts = Post.where(user_id: current_user.id).page(params[:post_page]).per(5)
     @post_like = Post.eager_load(:likes).where(likes: {user_id: current_user.id}).page(params[:like_page]).per(5)
-    respond_to do |format|
-      format.html
-      format.js
-    end
+    gon.posts = Post.all
+    # respond_to do |format|
+    #   format.html
+    #   format.js
+    # end
   end
 
   def unsubscribe
