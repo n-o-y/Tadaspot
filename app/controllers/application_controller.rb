@@ -7,4 +7,5 @@ class ApplicationController < ActionController::Base
   def configure_pemitted__parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
   end
+
 end

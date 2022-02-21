@@ -15,7 +15,6 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'mini_racer', platforms: :ruby
-
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
@@ -49,6 +48,7 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'js_rails_routes'
 end
 
 group :test do
@@ -60,33 +60,22 @@ group :test do
   gem 'rspec-rails', '~> 3.6'
   gem "factory_bot_rails"
   gem 'faker'
-
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-
-
-
 gem "gmaps4rails"
 gem "geocoder"
 gem "gon"
 gem "dotenv-rails"
-
 gem 'devise'
-
 gem 'jquery-rails'
-
 gem 'refile', require: "refile/rails", github: "manfe/refile"
 gem 'refile-mini_magick'
-
 gem 'bootstrap', '~>4.5'
-
 gem 'font-awesome-sass', '~> 5.13'
-
 gem 'kaminari'
-
-gem 'js_rails_routes', group: :development
+gem 'sprockets'
 
 group :production do
   gem 'mysql2'
