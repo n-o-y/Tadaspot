@@ -4,7 +4,8 @@ $('.post-star').raty({
     score: function(){
       return $(this).attr('data-score');
     }
-    // path: '/public/'
+    // starOn: '/assets/views/star-off.png',
+    // starOff: "<%= asset_path('star-off.png') %>"
 });
 
 $('.like-star').raty({
