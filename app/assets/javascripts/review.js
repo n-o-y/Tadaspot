@@ -4,7 +4,7 @@ $('.post-star').raty({
     score: function(){
       return $(this).attr('data-score');
     },
-    path: "/assets/",
+    path: "/public/",
     starOn: "star-on.png",
     starOff: "star-off.png"
 });
