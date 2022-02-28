@@ -10,8 +10,8 @@ $('.jscroll').jscroll({
       readOnly: true,
       score: function(){
         return $(this).attr('data-score');
-      },
-      path: "/assets/"
+      }
+      // path: "/assets/"
     });
   }
 });
